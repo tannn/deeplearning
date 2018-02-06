@@ -4,7 +4,7 @@ import os
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where MNIST is located')
-flags.DEFINE_string('username', 'bgeren')
+flags.DEFINE_string('username', 'bgeren', '')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
@@ -12,10 +12,10 @@ FLAGS = flags.FLAGS
 def main(argv):
     # load data
 
-    data_dir = '/work/cse496dl/' + FLAGS.username + '/homework01/logs'
+    save_dir = '/work/cse496dl/' + FLAGS.username + '/homework01/logs'
 
-    train_images = np.load(data_dir + 'fmnist_train_data.npy')
-    train_labels = np.load(data_dir + 'fmnist_train_labels.npy')
+    train_images = np.load(FLAGS.data_dir + 'fmnist_train_data.npy')
+    train_labels = np.load(FLAGS.data_dir + 'fmnist_train_labels.npy')
 
     train_images /= 255
 
@@ -101,18 +101,7 @@ def main(argv):
                 best_train_loss = avg_train_ce
                 best_valid_loss = avg_valid_ce
                 best_epoch = epoch                
-                # best_path_prefix = saver.save(session, os.path.join(FLAGS.save_dir, "mnist_inference"), global_step=global_step_tensor)
-
-    # # Clear the graph
-    # tf.reset_default_graph()
-    # session = tf.Session()
-    # graph = session.graph
-
-    # # loading the meta graph re-creates the graph structure in the current session, and restore initializes saved variables
-    # saver = tf.train.import_meta_graph(best_path_prefix + '.meta')
-    # saver.restore(session, best_path_prefix)
-    # x = graph.get_tensor_by_name('data_placeholder:0')
-    # output = graph.get_tensor_by_name('linear_model/model_output:0')
+                best_path_prefix = saver.save(session, os.path.join(FLAGS.save_dir, "homework_01"), global_step=global_step_tensor)
 
     print('BEST EPOCH: ' + str(best_epoch))
     print('TRAIN LOSS: ' + str(best_train_loss))
