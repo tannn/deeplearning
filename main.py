@@ -4,48 +4,51 @@ import os
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where MNIST is located')
-flags.DEFINE_string('save_dir', '/work/cse496dl/bgeren/hackathon3/logs', 'directory where model graph and weights are saved')
+flags.DEFINE_string('username', 'bgeren')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
 
-
 def main(argv):
     # load data
-    train_images = np.load(FLAGS.data_dir + 'fmnist_train_data.npy')
-    train_labels = np.load(FLAGS.data_dir + 'fmnist_train_labels.npy')
+
+    data_dir = '/work/cse496dl/' + FLAGS.username + '/homework01/logs'
+
+    train_images = np.load(data_dir + 'fmnist_train_data.npy')
+    train_labels = np.load(data_dir + 'fmnist_train_labels.npy')
+
+    train_images /= 255
 
     valid_images, train_images, valid_labels, train_labels = split_data(train_images, train_labels, 0.1)
 
     # split into train and validate
-    ## TODO
     train_num_examples = train_images.shape[0]
     valid_num_examples = valid_images.shape[0]
-    test_num_examples = test_images.shape[0]
 
     # specify the network
     x = tf.placeholder(tf.float32, [None, 784], name='data')
     with tf.name_scope('linear_model') as scope:
-        hidden = tf.layers.dense(x,
-                                 400,
-                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
-                                 bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+        hidden_1 = tf.layers.dense(x,
+                                 256,
                                  activation=tf.nn.relu,
-                                 name='hidden_layer')
-        output = tf.layers.dense(hidden,
+                                 name='hidden_layer_1')
+        #####################
+        # TODO: Add dropout #
+        #####################
+        hidden_2 = tf.layers.dense(hidden_1,
+                                 256,
+                                 activation=tf.nn.relu,
+                                 name='hidden_layer_2')
+        #####################
+        # TODO: Add dropout #
+        #####################
+        output = tf.layers.dense(hidden_2,
                                  10,
-                                 kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
-                                 bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
                                  name='output_layer')
     # define classification loss
     y = tf.placeholder(tf.float32, [None, 10], name='label')
     cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
 
-    regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
-    # this is the weight of the regularization part of the final loss
-    REG_COEFF = 0.001
-    # this value is what we'll pass to `minimize`
-    total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
     sum_cross_entropy = tf.reduce_mean(cross_entropy)
 
     confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=10)
@@ -54,7 +57,7 @@ def main(argv):
     # set up training and saving functionality
     # global_step_tensor = tf.get_variable('global_step', trainable=False, shape=[], initializer=tf.zeros_initializer)
     optimizer = tf.train.AdamOptimizer()
-    train_op = optimizer.minimize(total_loss)
+    train_op = optimizer.minimize(cross_entropy)
     saver = tf.train.Saver()
 
     with tf.Session() as session:
@@ -81,35 +84,22 @@ def main(argv):
 
             # report mean validation loss
             ce_vals = []
+            conf_mxs = []
             for i in range(valid_num_examples // batch_size):
                 batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
                 batch_ys = valid_labels[i*batch_size:(i+1)*batch_size, :]       
-                valid_ce, _ = session.run([sum_cross_entropy, y], {x: batch_xs, y: batch_ys})
-                ce_vals.append(valid_ce)
-            avg_valid_ce = sum(ce_vals) / len(ce_vals)
-            print('VALIDATION CROSS ENTROPY: ' + str(avg_valid_ce))
-            
-
-            # report mean test loss
-            ce_vals = []
-            conf_mxs = []
-            for i in range(test_num_examples // batch_size):
-                batch_xs = test_images[i*batch_size:(i+1)*batch_size, :]
-                batch_ys = test_labels[i*batch_size:(i+1)*batch_size, :]
                 test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
                 ce_vals.append(test_ce)
                 conf_mxs.append(conf_matrix)
-            avg_test_ce = sum(ce_vals) / len(ce_vals)
-            print('TEST CROSS ENTROPY: ' + str(avg_test_ce))
+            avg_valid_ce = sum(ce_vals) / len(ce_vals)
+            print('VALIDATION CROSS ENTROPY: ' + str(avg_valid_ce))
             print('TEST CONFUSION MATRIX:')
-
-
             print(str(sum(conf_mxs)))
+
 
             if (avg_valid_ce < best_valid_loss):
                 best_train_loss = avg_train_ce
                 best_valid_loss = avg_valid_ce
-                best_test_loss = avg_test_ce
                 best_epoch = epoch                
                 # best_path_prefix = saver.save(session, os.path.join(FLAGS.save_dir, "mnist_inference"), global_step=global_step_tensor)
 
@@ -140,7 +130,7 @@ def split_data(data, labels, proportion):
         - proportion: a float less than 1  
     """
     size = data.shape[0]
-    np.random.seed(42)
+    np.random.seed(69)
     s = np.random.permutation(size)
     split_idx = int(proportion * size)
     return data[s[:split_idx]], data[s[split_idx:]], labels[s[:split_idx]], labels[s[split_idx:]]
