@@ -29,9 +29,11 @@ def main(argv):
 
     # specify the network
     x = tf.placeholder(tf.float32, [None, 784], name='data')
+    x_normalized = x /255
+
     with tf.name_scope('linear_model') as scope:
 
-        dropout_1 = tf.nn.dropout(x, keep_prob)
+        dropout_1 = tf.nn.dropout(x_normalized, keep_prob)
 
         hidden_1 = tf.layers.dense(dropout_1,
                                  256,
