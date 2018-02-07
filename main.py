@@ -100,7 +100,7 @@ def main(argv):
                 conf_mxs.append(conf_matrix)
             avg_valid_ce = sum(ce_vals) / len(ce_vals)
             print('VALIDATION CROSS ENTROPY: ' + str(avg_valid_ce))
-            print('TEST CONFUSION MATRIX:')
+            print('VALIDATION CONFUSION MATRIX:')
             print(str(sum(conf_mxs)))
 
 
@@ -110,12 +110,12 @@ def main(argv):
                 best_valid_loss = avg_valid_ce
                 best_epoch = epoch                
                 best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_01"))
+                best_conf_mx = sum(conf_mxs)
 
     print('BEST EPOCH: ' + str(best_epoch))
     print('TRAIN LOSS: ' + str(best_train_loss))
     print('VALIDATION LOSS: '  + str(best_valid_loss))
-    print('TEST LOSS: ' + str(best_test_loss))
-
+    print('CONFUSION MATRIX' + str(best_conf_mx))
 
 def split_data(data, labels, proportion):
     """
