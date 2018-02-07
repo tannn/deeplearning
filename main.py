@@ -108,7 +108,7 @@ def main(argv):
                 best_train_loss = avg_train_ce
                 best_valid_loss = avg_valid_ce
                 best_epoch = epoch                
-                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_01"))
+                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_01-0"))
                 best_conf_mx = sum(conf_mxs)
 
     print('BEST EPOCH: ' + str(best_epoch))
