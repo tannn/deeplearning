@@ -25,7 +25,9 @@ def main(argv):
     train_num_examples = train_images.shape[0]
     valid_num_examples = valid_images.shape[0]
 
-    keep_prob = 0.8
+    keep_prob = 0.7
+    grace = 15
+    counter = 0
 
     # specify the network
     x = tf.placeholder(tf.float32, [None, 784], name='input_placeholder')
@@ -110,11 +112,18 @@ def main(argv):
                 best_epoch = epoch                
                 best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_01-0"))
                 best_conf_mx = sum(conf_mxs)
+                counter = 0
+            else:
+                counter = counter + 1
+
+            if counter >= grace:
+                break
 
     print('BEST EPOCH: ' + str(best_epoch))
     print('TRAIN LOSS: ' + str(best_train_loss))
     print('VALIDATION LOSS: '  + str(best_valid_loss))
-    print('CONFUSION MATRIX' + str(best_conf_mx))
+    print('CONFUSION MATRIX')
+    print(str(best_conf_mx))
 
 if __name__ == "__main__":
     tf.app.run()
