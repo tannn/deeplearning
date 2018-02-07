@@ -14,3 +14,6 @@ def split_data(data, labels, proportion):
     s = np.random.permutation(size)
     split_idx = int(proportion * size)
     return data[s[:split_idx]], data[s[split_idx:]], labels[s[:split_idx]], labels[s[split_idx:]]
+
+def update_keep_prob(keep_prob, rate):
+    return keep_prob + rate
