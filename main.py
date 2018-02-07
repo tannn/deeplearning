@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import os
+from util import *
 from sklearn.preprocessing import OneHotEncoder
 
 flags = tf.app.flags
@@ -116,21 +117,6 @@ def main(argv):
     print('TRAIN LOSS: ' + str(best_train_loss))
     print('VALIDATION LOSS: '  + str(best_valid_loss))
     print('CONFUSION MATRIX' + str(best_conf_mx))
-
-def split_data(data, labels, proportion):
-    """
-    Split a numpy array into two parts of `proportion` and `1 - proportion`
-    
-    Args:
-        - data: numpy array of data, to be split along the first axis
-        - labels: numpy array of the labels
-        - proportion: a float less than 1  
-    """
-    size = data.shape[0]
-    np.random.seed(69)
-    s = np.random.permutation(size)
-    split_idx = int(proportion * size)
-    return data[s[:split_idx]], data[s[split_idx:]], labels[s[:split_idx]], labels[s[split_idx:]]
 
 if __name__ == "__main__":
     tf.app.run()
