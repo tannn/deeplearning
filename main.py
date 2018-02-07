@@ -24,25 +24,31 @@ def main(argv):
     train_num_examples = train_images.shape[0]
     valid_num_examples = valid_images.shape[0]
 
+    keep_prob = 0.8
+
     # specify the network
     x = tf.placeholder(tf.float32, [None, 784], name='data')
-    x_normalized = x / 255
+    x_normalized = x /255
+
     with tf.name_scope('linear_model') as scope:
-        hidden_1 = tf.layers.dense(x_normalized,
+
+        dropout_1 = tf.nn.dropout(x_normalized, keep_prob)
+
+        hidden_1 = tf.layers.dense(dropout_1,
                                  256,
                                  activation=tf.nn.relu,
                                  name='hidden_layer_1')
-        #####################
-        # TODO: Add dropout #
-        #####################
-        hidden_2 = tf.layers.dense(hidden_1,
+
+        dropout_2 = tf.nn.dropout(hidden_1, keep_prob)
+
+        hidden_2 = tf.layers.dense(dropout_2,
                                  256,
                                  activation=tf.nn.relu,
                                  name='hidden_layer_2')
-        #####################
-        # TODO: Add dropout #
-        #####################
-        output = tf.layers.dense(hidden_2,
+        
+        dropout_3 = tf.nn.dropout(hidden_2, keep_prob)
+
+        output = tf.layers.dense(dropout_3,
                                  10,
                                  name='output_layer')
     # define classification loss
