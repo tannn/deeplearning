@@ -49,7 +49,7 @@ def main(argv):
 
         output = tf.layers.dense(dropout_2,
                                  10,
-                                 name='output_layer')
+                                 name='output')
     # define classification loss
     y = tf.placeholder(tf.float32, [None, 10], name='label')
     cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
