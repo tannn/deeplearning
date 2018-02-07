@@ -28,7 +28,7 @@ def main(argv):
 
     # specify the network
     x = tf.placeholder(tf.float32, [None, 784], name='data')
-    x_normalized = x /255
+    x_normalized = x / 255
 
     with tf.name_scope('linear_model') as scope:
 
