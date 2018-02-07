@@ -35,14 +35,14 @@ def main(argv):
         dropout_1 = tf.nn.dropout(x_normalized, keep_prob)
 
         hidden_1 = tf.layers.dense(dropout_1,
-                                 256,
+                                 488,
                                  activation=tf.nn.relu,
                                  name='hidden_layer_1')
 
         dropout_2 = tf.nn.dropout(hidden_1, keep_prob)
 
         hidden_2 = tf.layers.dense(dropout_2,
-                                 256,
+                                 488,
                                  activation=tf.nn.relu,
                                  name='hidden_layer_2')
         
