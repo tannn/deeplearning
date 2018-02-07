@@ -6,7 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where MNIST is located')
 flags.DEFINE_string('username', 'bgeren', '')
-flags.DEFINE_integer('batch_size', 32, '')
+flags.DEFINE_integer('batch_size', 128, '')
 flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
 
@@ -27,28 +27,26 @@ def main(argv):
     keep_prob = 0.8
 
     # specify the network
-    x = tf.placeholder(tf.float32, [None, 784], name='data')
+    x = tf.placeholder(tf.float32, [None, 784], name='input_placeholder')
     x_normalized = x / 255
 
     with tf.name_scope('linear_model') as scope:
 
-        dropout_1 = tf.nn.dropout(x_normalized, keep_prob)
-
-        hidden_1 = tf.layers.dense(dropout_1,
+        hidden_1 = tf.layers.dense(x_normalized,
                                  488,
                                  activation=tf.nn.relu,
                                  name='hidden_layer_1')
 
-        dropout_2 = tf.nn.dropout(hidden_1, keep_prob)
+        dropout_1 = tf.nn.dropout(hidden_1, keep_prob)
 
-        hidden_2 = tf.layers.dense(dropout_2,
+        hidden_2 = tf.layers.dense(dropout_1,
                                  488,
                                  activation=tf.nn.relu,
                                  name='hidden_layer_2')
         
-        dropout_3 = tf.nn.dropout(hidden_2, keep_prob)
+        dropout_2 = tf.nn.dropout(hidden_2, keep_prob)
 
-        output = tf.layers.dense(dropout_3,
+        output = tf.layers.dense(dropout_2,
                                  10,
                                  name='output_layer')
     # define classification loss
