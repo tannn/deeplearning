@@ -85,9 +85,9 @@ def main(argv):
         dropout_6 = tf.nn.dropout(hidden_6, keep_prob)
 
 
-        output = tf.layers.dense(dropout_6,
-                                 10,
-                                 name='output')
+    output = tf.layers.dense(dropout_6,
+                             10,
+                             name='output')
 
         # hidden_1 = tf.layers.dense(x_normalized,
         #                          420,
@@ -209,4 +209,4 @@ def main(argv):
 if __name__ == "__main__":
     tf.app.run()
 
-
+    
