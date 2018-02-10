@@ -16,4 +16,7 @@ def split_data(data, labels, proportion):
     return data[s[:split_idx]], data[s[split_idx:]], labels[s[:split_idx]], labels[s[split_idx:]]
 
 def update_keep_prob(keep_prob, rate):
-    return keep_prob + rate
+    new_keep_prob = keep_prob + rate
+    if (new_keep_prob > 1):
+        new_keep_prob = 1
+    return new_keep_prob
