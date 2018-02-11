@@ -88,6 +88,8 @@ def main(argv):
     output = tf.layers.dense(dropout_6,
                              10,
                              name='output')
+    
+    tf.identity(output, name='output')
 
     #     hidden_1 = tf.layers.dense(x_normalized,
     #                              420,
