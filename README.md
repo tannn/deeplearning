@@ -1,3 +1,0 @@
-# deeplearning
-
-# Team Raketified
