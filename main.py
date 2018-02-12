@@ -85,11 +85,12 @@ def main(argv):
         dropout_6 = tf.nn.dropout(hidden_6, keep_prob)
 
 
-    output = tf.layers.dense(dropout_6,
+    output_layer = tf.layers.dense(dropout_6,
                              10,
-                             name='output')
-    
-    tf.identity(output, name='output')
+                             name='output_layer')
+
+    output = tf.identity(output_layer, name='output')
+    print(output.name)
 
     #     hidden_1 = tf.layers.dense(x_normalized,
     #                              420,
