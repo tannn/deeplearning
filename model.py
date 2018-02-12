@@ -1,6 +1,7 @@
 import tensorflow as tf 
+from util import *
 
-def hidden_layers(x):
+def hidden_layers(x, keep_prob):
     with tf.name_scope('linear_model') as scope:
 
 	    hidden_1 = tf.layers.dense(x,

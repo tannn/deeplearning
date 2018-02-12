@@ -36,7 +36,7 @@ def main(argv):
     x = tf.placeholder(tf.float32, [None, 784], name='input_placeholder')
     x_normalized = x / 255
 
-    output_layer = hidden_layers(x_normalized)
+    output_layer = hidden_layers(x_normalized, keep_prob=keep_prob)
 
     output = tf.identity(output_layer, name='output')
     print(output.name)
