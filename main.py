@@ -8,7 +8,7 @@ flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where MNIST is located')
 flags.DEFINE_string('username', 'bgeren', '')
 flags.DEFINE_integer('batch_size', 32, '')
-flags.DEFINE_integer('max_epoch_num', 50, '')
+flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
