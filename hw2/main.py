@@ -46,7 +46,7 @@ def main(argv):
     valid_images_4, test_images_4, valid_labels_4, test_labels_4 = split_data(test_images_4, test_labels_4, 0.1)
 
     train_images = [train_images_1, train_images_2, train_images_3, train_images_4]
-    train_labels = [train_labels_1, train_labels_2, train_labels_3, train_ilabels_4]
+    train_labels = [train_labels_1, train_labels_2, train_labels_3, train_labels_4]
     test_images = [test_images_1, test_images_2, test_images_3, test_images_4]
     test_labels = [test_labels_1, test_labels_2, test_labels_3, test_labels_4]
     valid_images = [valid_images_1, valid_images_2, valid_images_3, valid_images_4]
