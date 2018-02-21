@@ -52,8 +52,11 @@ def main(argv):
     valid_images = [valid_images_1, valid_images_2, valid_images_3, valid_images_4]
     valid_labels = [valid_labels_1, valid_labels_2, valid_labels_3, valid_labels_4]
 
+    x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32, name='input_placeholder')
+	conv_x = my_conv_block(x, [16, 32, 64])
+	output = output_block(conv_x)
 
-
+	
 
 
 

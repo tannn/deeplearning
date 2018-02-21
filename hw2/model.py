@@ -24,10 +24,3 @@ def dense_block(inputs):
 	output_layer = tf.layers.dense(dropout_6, 10, name='output')
 	return output_layer
 
-
-def model():
-    x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32, name='input_placeholder')
-	conv_x = my_conv_block(x, [16, 32, 64])
-	output = output_block(conv_x)
-	######## I think maybe all of this should go in main but Tanner and Luis are working on main
-	#############
