@@ -1,6 +1,8 @@
 import tensorflow as tf
 import os
 import numpy as np
+from model import *
+from util import *
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
@@ -49,8 +51,6 @@ def main(argv):
     test_labels = [test_labels_1, test_labels_2, test_labels_3, test_labels_4]
     valid_images = [valid_images_1, valid_images_2, valid_images_3, valid_images_4]
     valid_labels = [valid_labels_1, valid_labels_2, valid_labels_3, valid_labels_4]
-
-
 
 
 

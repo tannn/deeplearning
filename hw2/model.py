@@ -18,3 +18,6 @@ def my_conv_block(inputs, filters):
 
         return output_tensor
 
+def model():
+    x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32)
+	conv_x = my_conv_block(x, [16, 32, 64])
