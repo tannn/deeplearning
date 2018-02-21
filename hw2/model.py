@@ -18,6 +18,16 @@ def my_conv_block(inputs, filters):
 
         return output_tensor
 
+def dense_block(inputs):
+	hidden_1 = tf.layers.Dense(512, activation=tf.nn.relu)
+	hidden_2 = tf.layers.Dense(128, activation=tf.nn.relu)
+	output_layer = tf.layers.dense(dropout_6, 10, name='output')
+	return output_layer
+
+
 def model():
-    x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32)
+    x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32, name='input_placeholder')
 	conv_x = my_conv_block(x, [16, 32, 64])
+	output = output_block(conv_x)
+	######## I think maybe all of this should go in main but Tanner and Luis are working on main
+	#############
