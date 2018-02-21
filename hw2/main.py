@@ -52,11 +52,9 @@ def main(argv):
     valid_images_list = [valid_images_1, valid_images_2, valid_images_3, valid_images_4]
     valid_labels_list = [valid_labels_1, valid_labels_2, valid_labels_3, valid_labels_4]
 
-    train_images_list = lambda i: list(map(np.reshape(train_images[i], [-1, 129, 129, 1]), range(len(train_images_list))))
-	valid_images_list = lambda i: list(map(np.reshape(valid_images[i], [-1, 129, 129, 1]), range(len(valid_images_list))))
-
     x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32, name='input_placeholder')
-    conv_x = my_conv_block(x, [16, 32, 64])
+    x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
+    conv_x = my_conv_block(x_reshaped, [16, 32, 64])
     output = output_block(conv_x)
 
     y = tf.placeholder(tf.float32, [None, 10], name='label')
@@ -91,55 +89,55 @@ def main(argv):
             valid_num_examples = valid_images.shape[0]
 
 
-	        for epoch in range(FLAGS.max_epoch_num):
-	            print('Epoch: ' + str(epoch))
+            for epoch in range(FLAGS.max_epoch_num):
+                print('Epoch: ' + str(epoch))
 
-	            # run gradient steps and report mean loss on train data
-	            ce_vals = []
-	            for i in range(train_num_examples // batch_size):
-	                batch_xs = train_images[i*batch_size:(i+1)*batch_size, :]
-	                batch_ys = onehot_encoder.fit_transform(train_labels.reshape(-1,1))[i*batch_size:(i+1)*batch_size, :]    
-	                _, train_ce = session.run([train_op, sum_cross_entropy], {x: batch_xs, y: batch_ys})
-	                ce_vals.append(train_ce)
-	            avg_train_ce = sum(ce_vals) / len(ce_vals)
-	            print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
+                # run gradient steps and report mean loss on train data
+                ce_vals = []
+                for i in range(train_num_examples // batch_size):
+                    batch_xs = train_images[i*batch_size:(i+1)*batch_size, :]
+                    batch_ys = onehot_encoder.fit_transform(train_labels.reshape(-1,1))[i*batch_size:(i+1)*batch_size, :]    
+                    _, train_ce = session.run([train_op, sum_cross_entropy], {x: batch_xs, y: batch_ys})
+                    ce_vals.append(train_ce)
+                avg_train_ce = sum(ce_vals) / len(ce_vals)
+                print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
 
 
-	            # report mean validation loss
-	            ce_vals = []
-	            conf_mxs = []
-	            for i in range(valid_num_examples // batch_size):
-	                batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
-	                batch_ys = onehot_encoder.fit_transform(valid_labels.reshape(-1,1))[i*batch_size:(i+1)*batch_size, :]    
-	                test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
-	                ce_vals.append(test_ce)
-	                conf_mxs.append(conf_matrix)
-	            avg_valid_ce = sum(ce_vals) / len(ce_vals)
-	            print('VALIDATION CROSS ENTROPY: ' + str(avg_valid_ce))
-	            print('VALIDATION CONFUSION MATRIX:')
-	            conf_matrix = sum(conf_mxs)
-	            print(str(conf_matrix))
-	            correct = 0
-	            for i in range(10):
-	                correct += conf_matrix[i, i]
-	            class_rate = float(correct) / sum(sum(conf_matrix))
-	                
-	            print('VALIDATION CLASSIFICATION RATE: ' + str(class_rate))
+                # report mean validation loss
+                ce_vals = []
+                conf_mxs = []
+                for i in range(valid_num_examples // batch_size):
+                    batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
+                    batch_ys = onehot_encoder.fit_transform(valid_labels.reshape(-1,1))[i*batch_size:(i+1)*batch_size, :]    
+                    test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
+                    ce_vals.append(test_ce)
+                    conf_mxs.append(conf_matrix)
+                avg_valid_ce = sum(ce_vals) / len(ce_vals)
+                print('VALIDATION CROSS ENTROPY: ' + str(avg_valid_ce))
+                print('VALIDATION CONFUSION MATRIX:')
+                conf_matrix = sum(conf_mxs)
+                print(str(conf_matrix))
+                correct = 0
+                for i in range(10):
+                    correct += conf_matrix[i, i]
+                class_rate = float(correct) / sum(sum(conf_matrix))
+                    
+                print('VALIDATION CLASSIFICATION RATE: ' + str(class_rate))
 
-	            if (class_rate > best_class_rate):
-	                print('New best found!')
-	                best_train_loss = avg_train_ce
-	                best_valid_loss = avg_valid_ce
-	                best_epoch = epoch                
-	                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_1-0"))
-	                best_conf_mx = conf_matrix
-	                best_class_rate = class_rate
-	                counter = 0
-	            else:
-	                counter = counter + 1
+                if (class_rate > best_class_rate):
+                    print('New best found!')
+                    best_train_loss = avg_train_ce
+                    best_valid_loss = avg_valid_ce
+                    best_epoch = epoch                
+                    best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_1-0"))
+                    best_conf_mx = conf_matrix
+                    best_class_rate = class_rate
+                    counter = 0
+                else:
+                    counter = counter + 1
 
-	            if counter >= grace:
-	                break
+                if counter >= grace:
+                    break
 
 
 
