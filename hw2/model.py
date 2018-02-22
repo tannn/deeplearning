@@ -21,6 +21,7 @@ def my_conv_block(inputs, filters):
 def dense_block(inputs):
     hidden_1 = tf.layers.Dense(512, activation=tf.nn.relu)
     hidden_2 = tf.layers.Dense(128, activation=tf.nn.relu)
-    output_layer = tf.layers.dense(dropout_6, 10, name='output')
+    output_layer = tf.layers.Dense(7, name='output')
+    output_tensor = output_layer(hidden_2(hidden_1(inputs)))
     return output_layer
 
