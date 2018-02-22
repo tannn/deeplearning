@@ -57,7 +57,7 @@ def main(argv):
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
     flat = tf.reshape(x_reshaped, [-1, 129*129*filter_sizes[2]])
-    output = dense_block(flat, name='output')
+    output = dense_block(flat)
 
     y = tf.placeholder(tf.float32, [None, 10], name='label')
     cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
