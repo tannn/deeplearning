@@ -52,7 +52,7 @@ def main(argv):
     valid_images_list = [valid_images_1, valid_images_2, valid_images_3, valid_images_4]
     valid_labels_list = [valid_labels_1, valid_labels_2, valid_labels_3, valid_labels_4]
 
-    x = tf.placeholder(shape=[None, 129, 129, 1], dtype=tf.float32, name='input_placeholder')
+    x = tf.placeholder(shape=[None, 16641], dtype=tf.float32, name='input_placeholder')
     x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
