@@ -57,7 +57,7 @@ def main(argv):
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
     flat = tf.reshape(x_reshaped, [-1, 129*129*filter_sizes[2]])
-    output = dense_block(flat, name='output')
+    output = dense_block(flat)
 
     y = tf.placeholder(tf.float32, [None, 10], name='label')
     cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
@@ -98,7 +98,7 @@ def main(argv):
                 ce_vals = []
                 for i in range(train_num_examples // batch_size):
                     batch_xs = train_images[i*batch_size:(i+1)*batch_size, :]
-                    batch_ys = onehot_encoder.fit_transform(train_labels.reshape(-1,1))[i*batch_size:(i+1)*batch_size, :]    
+                    batch_ys = train_labels.reshape(-1,1)[i*batch_size:(i+1)*batch_size, :]    
                     _, train_ce = session.run([train_op, sum_cross_entropy], {x: batch_xs, y: batch_ys})
                     ce_vals.append(train_ce)
                 avg_train_ce = sum(ce_vals) / len(ce_vals)
@@ -110,7 +110,7 @@ def main(argv):
                 conf_mxs = []
                 for i in range(valid_num_examples // batch_size):
                     batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
-                    batch_ys = onehot_encoder.fit_transform(valid_labels.reshape(-1,1))[i*batch_size:(i+1)*batch_size, :]    
+                    batch_ys = valid_labels.reshape(-1,1)[i*batch_size:(i+1)*batch_size, :]    
                     test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
                     ce_vals.append(test_ce)
                     conf_mxs.append(conf_matrix)

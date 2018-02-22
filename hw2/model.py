@@ -7,21 +7,17 @@ def my_conv_block(inputs, filters):
         - filters: iterable of ints of length 3
     """
     with tf.name_scope('conv_block') as scope:
-        first_conv = tf.layers.Conv2D(filters[0], 3, 1, padding='same')
-        second_conv = tf.layers.Conv2D(filters[1], 3, 1, padding='same')
-        third_conv = tf.layers.Conv2D(filters[2], 3, 1, padding='same')
-        pool = tf.layers.MaxPooling2D(2, 2, padding='same')
-        output_tensor = pool(third_conv(pool(second_conv(pool(first_conv(inputs))))))
-        layer_list = [first_conv, second_conv, third_conv, pool]
-        block_parameter_num = sum(map(lambda layer: layer.count_params(), layer_list))
-        print('Number of parameters in conv block: ' + str(block_parameter_num))
-
-        return output_tensor
+        first_conv = tf.layers.conv2d(inputs, filters[0], 3, 1, padding='same')
+        pool_1 = tf.layers.max_pooling2d(first_conv, 2, 2, padding='same')
+        second_conv = tf.layers.conv2d(pool_1, filters[1], 3, 1, padding='same')
+        pool_2 = tf.layers.max_pooling2d(second_conv, 2, 2, padding='same')
+        third_conv = tf.layers.conv2d(pool_2, filters[2], 3, 1, padding='same')
+        pool_3 = tf.layers.max_pooling2d(third_conv, 2, 2, padding='same')
+        return pool_3
 
 def dense_block(inputs):
-    hidden_1 = tf.layers.Dense(512, activation=tf.nn.relu)
-    hidden_2 = tf.layers.Dense(128, activation=tf.nn.relu)
-    output_layer = tf.layers.Dense(7, name='output')
-    output_tensor = output_layer(hidden_2(hidden_1(inputs)))
+    hidden_1 = tf.layers.dense(inputs, 512, activation=tf.nn.relu)
+    hidden_2 = tf.layers.dense(hidden_1, 128, activation=tf.nn.relu)
+    output_layer = tf.layers.dense(hidden_2, 7, name='output')
     return output_layer
 
