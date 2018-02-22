@@ -56,10 +56,10 @@ def main(argv):
     x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
-    flat = tf.reshape(x_reshaped, [-1, 129*129*filter_sizes[2]])
+    flat = tf.reshape(conv_x, [-1, 129*129*filter_sizes[2]])
     output = dense_block(flat)
 
-    y = tf.placeholder(tf.float32, [None, 10], name='label')
+    y = tf.placeholder(tf.float32, [None, 7], name='label')
     cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
 
     sum_cross_entropy = tf.reduce_mean(cross_entropy)
@@ -79,6 +79,7 @@ def main(argv):
         best_class_rate = float("-inf")
         best_epoch = -1
 
+
         for fold in range(4):
             ###### TODO: I feel like we don't need to split the data because it is already split for us
             ####### we can use the data called "test" as our validation set, so we don't need to make a new validation set
@@ -89,6 +90,9 @@ def main(argv):
             valid_labels = valid_labels_list[fold]
             train_num_examples = train_images.shape[0]
             valid_num_examples = valid_images.shape[0]
+        	
+        	bs_batch = train_images[0:batch_size, :]
+        	print(conv_x.eval().shape[0], {x:bs_batch})
 
 
             for epoch in range(FLAGS.max_epoch_num):
@@ -98,7 +102,7 @@ def main(argv):
                 ce_vals = []
                 for i in range(train_num_examples // batch_size):
                     batch_xs = train_images[i*batch_size:(i+1)*batch_size, :]
-                    batch_ys = train_labels.reshape(-1,1)[i*batch_size:(i+1)*batch_size, :]    
+                    batch_ys = train_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
                     _, train_ce = session.run([train_op, sum_cross_entropy], {x: batch_xs, y: batch_ys})
                     ce_vals.append(train_ce)
                 avg_train_ce = sum(ce_vals) / len(ce_vals)
@@ -110,7 +114,7 @@ def main(argv):
                 conf_mxs = []
                 for i in range(valid_num_examples // batch_size):
                     batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
-                    batch_ys = valid_labels.reshape(-1,1)[i*batch_size:(i+1)*batch_size, :]    
+                    batch_ys = valid_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
                     test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
                     ce_vals.append(test_ce)
                     conf_mxs.append(conf_matrix)
