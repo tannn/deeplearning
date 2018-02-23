@@ -19,8 +19,6 @@ def main(argv):
 
     save_dir = '/work/' + path_string + '/homework02/logs'
 
-    train_images_list, train_labels_list, test_images_list, test_labels_list, valid_images_list, valid_labels_list = load_data(FLAGS.data_dir)
-
     x = tf.placeholder(shape=[None, 16641], dtype=tf.float32, name='input_placeholder')
     x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
     filter_sizes = [16, 32, 64]
@@ -48,6 +46,8 @@ def main(argv):
         best_epoch = -1
         grace = 15
         counter = 0
+
+        train_images_list, train_labels_list, test_images_list, test_labels_list, valid_images_list, valid_labels_list = load_data(FLAGS.data_dir)
 
         for fold in range(4):
             train_images = train_images_list[fold]
