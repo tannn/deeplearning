@@ -97,9 +97,9 @@ def main(argv):
             train_num_examples = train_images.shape[0]
             valid_num_examples = valid_images.shape[0]
             test_num_examples = test_images.shape[0]
-	        best_valid_class_rate = float("-inf")
+            best_valid_class_rate = float("-inf")
 
-	       	print('Fold' + str(fold))
+               print('Fold' + str(fold))
 
             for epoch in range(FLAGS.max_epoch_num):
                 print('Epoch: ' + str(epoch))
@@ -173,7 +173,7 @@ def main(argv):
 
                 if counter >= grace:
                     break
-            	print('--------------------')
+                print('--------------------')
 
             ###### TODO: add a print of all the best results
             ###### mirror it after what we did last homeowrk
