@@ -7,6 +7,7 @@ from util import *
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
 flags.DEFINE_string('username', 'bgeren', '')
+flags.DEFINE_string('workdir', 'cse496dl', '')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
@@ -14,7 +15,7 @@ FLAGS = flags.FLAGS
 def main(argv):
     # load data for first fold
 
-    save_dir = '/work/cse496dl/' + FLAGS.username + '/homework02/logs'
+    save_dir = '/work/' + FLAGS.workdir + '/' + FLAGS.username + '/homework02/logs'
 
     train_images_1 = np.load(FLAGS.data_dir + 'train_x_1.npy')
     train_labels_1 = np.load(FLAGS.data_dir + 'train_y_1.npy')
