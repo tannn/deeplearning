@@ -13,12 +13,16 @@ flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
+    # load text file
+    file_o = f.open("path.txt", "r")
+    path_string = f.read()
+
     # load data for first fold
 
     grace = 15
     counter = 0
 
-    save_dir = '/work/' + FLAGS.workdir + '/' + FLAGS.username + '/homework02/logs'
+    save_dir = '/work/' + path_string + '/homework02/logs'
 
     train_images_1 = np.load(FLAGS.data_dir + 'train_x_1.npy')
     train_labels_1 = np.load(FLAGS.data_dir + 'train_y_1.npy')
@@ -84,9 +88,6 @@ def main(argv):
 
 
         for fold in range(4):
-            ###### TODO: I feel like we don't need to split the data because it is already split for us
-            ####### we can use the data called "test" as our validation set, so we don't need to make a new validation set
-            ###### could be wrong though
             train_images = train_images_list[fold]
             train_labels = train_labels_list[fold]
             valid_images = valid_images_list[fold]
