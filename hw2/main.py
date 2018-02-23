@@ -15,6 +15,9 @@ FLAGS = flags.FLAGS
 def main(argv):
     # load data for first fold
 
+    grace = 15
+    counter = 0
+
     save_dir = '/work/' + FLAGS.workdir + '/' + FLAGS.username + '/homework02/logs'
 
     train_images_1 = np.load(FLAGS.data_dir + 'train_x_1.npy')
