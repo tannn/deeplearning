@@ -85,9 +85,6 @@ def main(argv):
 
 
         for fold in range(4):
-            ###### TODO: I feel like we don't need to split the data because it is already split for us
-            ####### we can use the data called "test" as our validation set, so we don't need to make a new validation set
-            ###### could be wrong though
             train_images = train_images_list[fold]
             train_labels = train_labels_list[fold]
             valid_images = valid_images_list[fold]
