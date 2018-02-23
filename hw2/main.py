@@ -44,8 +44,8 @@ def main(argv):
         batch_size = FLAGS.batch_size
 
         best_epoch = -1
-        grace = 15
-        counter = 0
+        # grace = 15
+        # counter = 0
 
         train_images_list, train_labels_list, test_images_list, test_labels_list, valid_images_list, valid_labels_list = load_data(FLAGS.data_dir)
 
@@ -120,21 +120,21 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
 
 
-                if (valid_class_rate > best_valid_class_rate):
-                    print('New best found!')
-                    best_train_loss = avg_train_ce
-                    best_valid_loss = avg_valid_ce
-                    best_epoch = epoch                
-                    best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_1-0.fold" + str(fold)))
-                    best_conf_mx = conf_matrix
-                    best_valid_class_rate = valid_class_rate
-                    best_test_class_rate = test_class_rate
-                    counter = 0
-                else:
-                    counter = counter + 1
+                # if (valid_class_rate > best_valid_class_rate):
+                print('New best found!')
+                best_train_loss = avg_train_ce
+                best_valid_loss = avg_valid_ce
+                best_epoch = epoch                
+                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_1-0.fold" + str(fold)))
+                best_conf_mx = conf_matrix
+                best_valid_class_rate = valid_class_rate
+                best_test_class_rate = test_class_rate
+                counter = 0
+                # else:
+                #     counter = counter + 1
 
-                if counter >= grace:
-                    break
+                # if counter >= grace:
+                #     break
                 print('--------------------')
 
             ###### TODO: add a print of all the best results
