@@ -15,7 +15,7 @@ FLAGS = flags.FLAGS
 def main(argv):
     # load text file
     with open("path.txt", "r") as f: 
-        path_string = f.read()
+        path_string = f.read().split(sep='\n')[0]
 
     # load data for first fold
 
