@@ -6,7 +6,7 @@ from util import *
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
-flags.DEFINE_string('username', 'tmarino', '')
+flags.DEFINE_string('username', 'bgeren', '')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
@@ -49,7 +49,7 @@ def main(argv):
     x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
-    flat = tf.reshape(conv_x, [-1, 129*129*filter_sizes[2]])
+    flat = tf.reshape(conv_x, [-1, 17*17*filter_sizes[2]])
     output = dense_block(flat)
 
     y = tf.placeholder(tf.float32, [None, 7], name='label')
@@ -83,10 +83,6 @@ def main(argv):
             valid_labels = valid_labels_list[fold]
             train_num_examples = train_images.shape[0]
             valid_num_examples = valid_images.shape[0]
-        	
-        	bs_batch = train_images[0:batch_size, :]
-        	print(conv_x.eval().shape[0], {x:bs_batch})
-
 
             for epoch in range(FLAGS.max_epoch_num):
                 print('Epoch: ' + str(epoch))
