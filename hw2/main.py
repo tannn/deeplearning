@@ -14,8 +14,8 @@ FLAGS = flags.FLAGS
 
 def main(argv):
     # load text file
-    file_o = f.open("path.txt", "r")
-    path_string = f.read()
+    with open("path.txt", "r") as f: 
+        path_string = f.read()
 
     # load data for first fold
 
