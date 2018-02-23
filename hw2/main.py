@@ -17,11 +17,6 @@ def main(argv):
     file_o = f.open("path.txt", "r")
     path_string = f.read()
 
-    # load data for first fold
-
-    grace = 15
-    counter = 0
-
     save_dir = '/work/' + path_string + '/homework02/logs'
 
     train_images_list, train_labels_list, test_images_list, test_labels_list, valid_images_list, valid_labels_list = load_data(FLAGS.data_dir)
@@ -51,7 +46,8 @@ def main(argv):
         batch_size = FLAGS.batch_size
 
         best_epoch = -1
-
+        grace = 15
+        counter = 0
 
         for fold in range(4):
             train_images = train_images_list[fold]
