@@ -175,8 +175,15 @@ def main(argv):
                     break
             	print('--------------------')
 
-            	###### TODO: add a print of all the best results
-            	###### mirror it after what we did last homeowrk
+            ###### TODO: add a print of all the best results
+            ###### mirror it after what we did last homeowrk
+            print('BEST EPOCH: ' + str(best_epoch))
+            print('BEST TRAIN LOSS: ' + str(best_train_loss))
+            print('BEST VALIDATION LOSS: ' + str(best_valid_loss))
+            print('CONFUSION MATRIX')
+            print(str(best_conf_mx))
+            print('BEST TEST CLASSIFICATION RATE: ' + str(best_test_class_rate))
+            print('BEST VALIDATION CLASSIFICATION RATE: ' + str(best_valid_class_rate))
             print('--------------------')
             print('--------------------')
 
