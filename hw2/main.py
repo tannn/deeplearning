@@ -115,7 +115,54 @@ def main(argv):
 
         train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_english)
         session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
+        for fold in range(4):
+            train_images = train_images_list[fold]
+            train_labels = train_labels_list[fold]
+            test_images = test_images_list[fold]
+            test_labels = test_labels_list[fold]
+            train_num_examples = train_images.shape[0]
+            test_num_examples = test_images.shape[0]
 
+            print('Fold ' + str(fold))
+            
+            for epoch in range(FLAGS.max_epoch_num_english):
+                    print('Epoch: ' + str(epoch))
+
+                    # run gradient steps and report mean loss on train data
+                    ce_vals = []
+                    for i in range(train_num_examples // batch_size):
+                        batch_xs = train_images[i*batch_size:(i+1)*batch_size, :]
+                        batch_ys = train_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
+                        _, train_ce = session.run([train_op_english, sum_cross_entropy_english], {x: batch_xs, y: batch_ys})
+                        ce_vals.append(train_ce)
+                    avg_train_ce = sum(ce_vals) / len(ce_vals)
+                    print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
+
+
+                    # report mean test loss
+                    ce_vals = []
+                    conf_mxs = []
+                    for i in range(test_num_examples // batch_size):
+                        batch_xs = test_images[i*batch_size:(i+1)*batch_size, :]
+                        batch_ys = test_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
+                        test_ce, conf_matrix = session.run([sum_cross_entropy_english, confusion_matrix_op_english], {x: batch_xs, y: batch_ys})
+                        ce_vals.append(test_ce)
+                        conf_mxs.append(conf_matrix)
+                    avg_test_ce = sum(ce_vals) / len(ce_vals)
+                    print('TEST CROSS ENTROPY: ' + str(avg_test_ce))
+                    print('TEST CONFUSION MATRIX:')
+                    conf_matrix = sum(conf_mxs)
+                    print(str(conf_matrix))
+                    correct = 0
+                    for i in range(7):
+                        correct += conf_matrix[i, i]
+                    test_class_rate = float(correct) / sum(sum(conf_matrix))
+                        
+                    print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
+                    print('--------------------')
+
+                    path = saver.save(session, os.path.join(save_dir, "homework_02_english_fold_" + fold))
+                print('--------------------')
 
 
 if __name__ == "__main__":
