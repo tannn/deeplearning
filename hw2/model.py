@@ -24,7 +24,8 @@ def dense_block(inputs, language):
 
 def optimizer_block(language, layer, label, rate):
     with tf.name_scope('optimizer_'+ language) as scope:
-        cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=label, logits=layer)
+        print(list(layer.get_shape()))
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=layer)
         optimizer = tf.train.AdamOptimizer(learning_rate=rate)
         if (language=='english'):
             variables_to_train = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_english")
