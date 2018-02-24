@@ -28,32 +28,32 @@ def main(argv):
 
     y = tf.placeholder(tf.float32, [None, 7], name='label')
 
+    # German
     output_dense_german = dense_block(flat, language="german")
     output_german = tf.identity(output_dense_german, name='output')
-    cross_entropy_german  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output_german)
     confusion_matrix_op_german = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output_german, axis=1), num_classes=7)
-    sum_cross_entropy_german = tf.reduce_mean(cross_entropy_german)
 
+    optimizer_german, cross_entropy_german, train_op_german = optimizer_block("german", output_dense_german, y, 0.001)
+    sum_cross_entropy_german = tf.reduce_mean(cross_entropy_german)
+    
+    optimizer_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer_german")
+    dense_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
+
+    # English
     output_dense_english = dense_block(flat, language="english")
     output_english = tf.identity(output_dense_english, name='output')
-    cross_entropy_english  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output_english)
     confusion_matrix_op_english = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output_english, axis=1), num_classes=7)
+
+    optimizer_english, cross_entropy_english, train_op_english = optimizer_block("english", output_dense_english, y, 0.001)
     sum_cross_entropy_english = tf.reduce_mean(cross_entropy_english)
-    
-
-
-    optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
-    train_op_english = optimizer.minimize(cross_entropy_english, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
-    train_op_german = optimizer.minimize(cross_entropy_german, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
     saver = tf.train.Saver()
     
-    optimizer_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer")
-    dense_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
+    optimizer_vars_english = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer_english")
     dense_vars_english = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_english")
 
     with tf.Session() as session:
 
-        session.run(tf.variables_initializer(optimizer_vars + dense_vars_german, name='init'))
+        session.run(tf.global_variables_initializer())
 
         # run training
         batch_size = FLAGS.batch_size
@@ -113,8 +113,11 @@ def main(argv):
                 path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + fold))
             print('--------------------')
 
+        # Load English Data
         train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_english)
-        session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
+        session.run(tf.variables_initializer(optimizer_vars_english + dense_vars_english, name='init'))
+        
+        # Begin English train loops
         for fold in range(4):
             train_images = train_images_list[fold]
             train_labels = train_labels_list[fold]
