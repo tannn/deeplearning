@@ -110,11 +110,11 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                ##### TODO: Add a saver line here
-                ##### can copy and paste the one from the old code
-                ##### just use gitk and look like 10 or 20 commits back
+                path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + fold))
 
-                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_02"))
+
+
+
             print('--------------------')
 
         train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_english)
