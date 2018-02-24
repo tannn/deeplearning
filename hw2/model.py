@@ -16,7 +16,7 @@ def my_conv_block(inputs, filters):
         return pool_3
 
 def dense_block(inputs, language):
-    with tf.name_scope('dense_block') as scope:
+    with tf.name_scope('dense_block_' + language) as scope:
         hidden_1 = tf.layers.dense(inputs, 512, activation=tf.nn.relu, name=language + "_hidden_1")
         hidden_2 = tf.layers.dense(hidden_1, 128, activation=tf.nn.relu, name=language + "_hidden_2")
         output_layer = tf.layers.dense(hidden_2, 7, name=language + "_output")
