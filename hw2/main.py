@@ -23,23 +23,34 @@ def main(argv):
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
     flat = tf.reshape(conv_x, [-1, 17*17*filter_sizes[2]])
-    output_dense = dense_block(flat, language="german")
-    output = tf.identity(output_dense, name='output')
+
 
     y = tf.placeholder(tf.float32, [None, 7], name='label')
-    cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
 
-    sum_cross_entropy = tf.reduce_mean(cross_entropy)
+    output_dense_german = dense_block(flat, language="german")
+    output_german = tf.identity(output_dense_german, name='output')
+    cross_entropy_german  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output_german)
+    confusion_matrix_op_german = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output_german, axis=1), num_classes=7)
+    sum_cross_entropy_german = tf.reduce_mean(cross_entropy_german)
 
-    confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=7)
+    output_dense_english = dense_block(flat, language="english")
+    output_english = tf.identity(output_dense_english, name='output')
+    cross_entropy_english  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output_english)
+    confusion_matrix_op_english = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output_english, axis=1), num_classes=7)
+    sum_cross_entropy_english = tf.reduce_mean(cross_entropy_english)
+    
+
 
     optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
-    train_op = optimizer.minimize(cross_entropy, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
+    train_op_english = optimizer.minimize(cross_entropy_english, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
+    train_op_german = optimizer.minimize(cross_entropy_german, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
     saver = tf.train.Saver()
     
     optimizer_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer")
-    dense_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
-    session.run(tf.variables_initializer(optimizer_vars + dense_vars, name='init'))
+    dense_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
+    dense_vars_english = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_english")
+    session.run(tf.variables_initializer(optimizer_vars + dense_vars_german, name='init'))
+
     with tf.Session() as session:
 
         session.run(tf.global_variables_initializer())
@@ -71,7 +82,7 @@ def main(argv):
                 for i in range(train_num_examples // batch_size):
                     batch_xs = train_images[i*batch_size:(i+1)*batch_size, :]
                     batch_ys = train_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
-                    _, train_ce = session.run([train_op, sum_cross_entropy], {x: batch_xs, y: batch_ys})
+                    _, train_ce = session.run([train_op_german, sum_cross_entropy_german], {x: batch_xs, y: batch_ys})
                     ce_vals.append(train_ce)
                 avg_train_ce = sum(ce_vals) / len(ce_vals)
                 print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
@@ -83,7 +94,7 @@ def main(argv):
                 for i in range(test_num_examples // batch_size):
                     batch_xs = test_images[i*batch_size:(i+1)*batch_size, :]
                     batch_ys = test_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
-                    test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
+                    test_ce, conf_matrix = session.run([sum_cross_entropy_german, confusion_matrix_op_german], {x: batch_xs, y: batch_ys})
                     ce_vals.append(test_ce)
                     conf_mxs.append(conf_matrix)
                 avg_test_ce = sum(ce_vals) / len(ce_vals)
@@ -105,8 +116,10 @@ def main(argv):
 
             print('--------------------')
 
-
-
+    
+    data_dir = '/work/cse496dl/shared/homework/02/SAVEE-British/'
+    train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(data_dir)
+    session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
 
 
 if __name__ == "__main__":
