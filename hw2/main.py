@@ -6,8 +6,6 @@ from util import *
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
-flags.DEFINE_string('username', 'bgeren', '')
-flags.DEFINE_string('workdir', 'cse496dl', '')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
