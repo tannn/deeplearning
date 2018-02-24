@@ -36,7 +36,11 @@ def main(argv):
     train_op = optimizer.minimize(cross_entropy, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
     saver = tf.train.Saver()
     
+    optimizer_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer")
+    dense_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
+    session.run(tf.variables_initializer(optimizer_vars + dense_vars, name='init'))
     with tf.Session() as session:
+
         session.run(tf.global_variables_initializer())
 
         # run training
