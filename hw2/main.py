@@ -22,7 +22,7 @@ def main(argv):
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
     flat = tf.reshape(conv_x, [-1, 17*17*filter_sizes[2]])
-    output_dense = dense_block(flat)
+    output_dense = dense_block(flat, language="german")
     output = tf.identity(output_dense, name='output')
 
     y = tf.placeholder(tf.float32, [None, 7], name='label')
