@@ -29,7 +29,7 @@ def optimizer_block(language, layer, label, rate):
         if (language=='english'):
             variables_to_train = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_english")
             train_op = optimizer.minimize(cross_entropy, var_list=variables_to_train)
-        else 
+        else:
             train_op = optimizer.minimize(cross_entropy)
         
         return optimizer, cross_entropy, train_op
