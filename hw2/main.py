@@ -5,7 +5,8 @@ from model import *
 from util import *
 
 flags = tf.app.flags
-flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
+flags.DEFINE_string('data_dir_german', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
+flags.DEFINE_string('data_dir_english', '/work/cse496dl/shared/homework/02/SAVEE-British/', 'directory where SAVEE-British is located')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num_german', 6, '')
 flags.DEFINE_integer('max_epoch_num_english', 50, '')
@@ -49,11 +50,10 @@ def main(argv):
     optimizer_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer")
     dense_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
     dense_vars_english = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_english")
-    session.run(tf.variables_initializer(optimizer_vars + dense_vars_german, name='init'))
 
     with tf.Session() as session:
 
-        session.run(tf.global_variables_initializer())
+        session.run(tf.variables_initializer(optimizer_vars + dense_vars_german, name='init'))
 
         # run training
         batch_size = FLAGS.batch_size
@@ -62,7 +62,7 @@ def main(argv):
         # grace = 15
         # counter = 0
 
-        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir)
+        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_german)
 
         for fold in range(4):
             train_images = train_images_list[fold]
@@ -110,16 +110,10 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                ##### TODO: Add a saver line here
-                ##### can copy and paste the one from the old code
-                ##### just use gitk and look like 10 or 20 commits back
-
-                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_02"))
-           
+                path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + fold))
             print('--------------------')
 
-        data_dir = '/work/cse496dl/shared/homework/02/SAVEE-British/'
-        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(data_dir)
+        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_english)
         session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
 
 
