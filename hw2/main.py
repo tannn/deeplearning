@@ -102,9 +102,7 @@ def main(argv):
                 ##### TODO: Add a saver line here
                 ##### can copy and paste the one from the old code
                 ##### just use gitk and look like 10 or 20 commits back
-
-            print('--------------------')
-
+                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_02"))
 
 
 
