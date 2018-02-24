@@ -129,7 +129,7 @@ def main(argv):
                 best_conf_mx = conf_matrix
                 best_valid_class_rate = valid_class_rate
                 best_test_class_rate = test_class_rate
-                counter = 0
+                # counter = 0
                 # else:
                 #     counter = counter + 1
 
