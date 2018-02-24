@@ -16,8 +16,9 @@ def my_conv_block(inputs, filters):
         return pool_3
 
 def dense_block(inputs):
-    hidden_1 = tf.layers.dense(inputs, 512, activation=tf.nn.relu)
-    hidden_2 = tf.layers.dense(hidden_1, 128, activation=tf.nn.relu)
-    output_layer = tf.layers.dense(hidden_2, 7, name='output')
-    return output_layer
+    with tf.name_scope('dense_block') as scope:
+        hidden_1 = tf.layers.dense(inputs, 512, activation=tf.nn.relu)
+        hidden_2 = tf.layers.dense(hidden_1, 128, activation=tf.nn.relu)
+        output_layer = tf.layers.dense(hidden_2, 7)
+        return output_layer
 
