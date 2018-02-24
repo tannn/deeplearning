@@ -105,7 +105,7 @@ def main(argv):
                     test_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
                     ce_vals.append(test_ce)
                     conf_mxs.append(conf_matrix)
-                avg_valid_ce = sum(ce_vals) / len(ce_vals)
+                avg_test_ce = sum(ce_vals) / len(ce_vals)
                 print('TEST CROSS ENTROPY: ' + str(avg_test_ce))
                 print('TEST CONFUSION MATRIX:')
                 conf_matrix = sum(conf_mxs)
