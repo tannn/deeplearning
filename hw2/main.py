@@ -45,19 +45,15 @@ def main(argv):
         # grace = 15
         # counter = 0
 
-        train_images_list, train_labels_list, test_images_list, test_labels_list, valid_images_list, valid_labels_list = load_data(FLAGS.data_dir)
+        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir)
 
         for fold in range(4):
             train_images = train_images_list[fold]
             train_labels = train_labels_list[fold]
-            valid_images = valid_images_list[fold]
-            valid_labels = valid_labels_list[fold]
             test_images = test_images_list[fold]
             test_labels = test_labels_list[fold]
             train_num_examples = train_images.shape[0]
-            valid_num_examples = valid_images.shape[0]
             test_num_examples = test_images.shape[0]
-            best_valid_class_rate = float("-inf")
 
             print('Fold' + str(fold))
 
@@ -74,27 +70,6 @@ def main(argv):
                 avg_train_ce = sum(ce_vals) / len(ce_vals)
                 print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
 
-
-                # report mean validation loss
-                ce_vals = []
-                conf_mxs = []
-                for i in range(valid_num_examples // batch_size):
-                    batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
-                    batch_ys = valid_labels.reshape(-1,7)[i*batch_size:(i+1)*batch_size, :]    
-                    valid_ce, conf_matrix = session.run([sum_cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
-                    ce_vals.append(valid_ce)
-                    conf_mxs.append(conf_matrix)
-                avg_valid_ce = sum(ce_vals) / len(ce_vals)
-                print('VALIDATION CROSS ENTROPY: ' + str(avg_valid_ce))
-                print('VALIDATION CONFUSION MATRIX:')
-                conf_matrix = sum(conf_mxs)
-                print(str(conf_matrix))
-                correct = 0
-                for i in range(7):
-                    correct += conf_matrix[i, i]
-                valid_class_rate = float(correct) / sum(sum(conf_matrix))
-                    
-                print('VALIDATION CLASSIFICATION RATE: ' + str(valid_class_rate))
 
                 # report mean test loss
                 ce_vals = []
@@ -116,35 +91,8 @@ def main(argv):
                 test_class_rate = float(correct) / sum(sum(conf_matrix))
                     
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
-
-
-                # if (valid_class_rate > best_valid_class_rate):
-                print('New best found!')
-                best_train_loss = avg_train_ce
-                best_valid_loss = avg_valid_ce
-                best_epoch = epoch                
-                best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_1-0.fold" + str(fold)))
-                best_conf_mx = conf_matrix
-                best_valid_class_rate = valid_class_rate
-                best_test_class_rate = test_class_rate
-                # counter = 0
-                # else:
-                #     counter = counter + 1
-
-                # if counter >= grace:
-                #     break
                 print('--------------------')
 
-            ###### TODO: add a print of all the best results
-            ###### mirror it after what we did last homeowrk
-            print('BEST EPOCH: ' + str(best_epoch))
-            print('BEST TRAIN LOSS: ' + str(best_train_loss))
-            print('BEST VALIDATION LOSS: ' + str(best_valid_loss))
-            print('CONFUSION MATRIX')
-            print(str(best_conf_mx))
-            print('BEST TEST CLASSIFICATION RATE: ' + str(best_test_class_rate))
-            print('BEST VALIDATION CLASSIFICATION RATE: ' + str(best_valid_class_rate))
-            print('--------------------')
             print('--------------------')
 
 
