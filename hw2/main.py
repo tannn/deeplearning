@@ -5,7 +5,8 @@ from model import *
 from util import *
 
 flags = tf.app.flags
-flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
+flags.DEFINE_string('data_dir_german', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
+flags.DEFINE_string('data_dir_english', '/work/cse496dl/shared/homework/02/SAVEE-British/', 'directory where EMODB-German is located')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num_german', 6, '')
 flags.DEFINE_integer('max_epoch_num_english', 50, '')
@@ -61,7 +62,7 @@ def main(argv):
         # grace = 15
         # counter = 0
 
-        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir)
+        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_german)
 
         for fold in range(4):
             train_images = train_images_list[fold]
@@ -116,8 +117,7 @@ def main(argv):
                 best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_02"))
             print('--------------------')
 
-        data_dir = '/work/cse496dl/shared/homework/02/SAVEE-British/'
-        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(data_dir)
+        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_english)
         session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
 
 
