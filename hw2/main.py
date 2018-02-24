@@ -33,7 +33,7 @@ def main(argv):
     confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=7)
 
     optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
-    train_op = optimizer.minimize(cross_entropy)
+    train_op = optimizer.minimize(cross_entropy, var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block"))
     saver = tf.train.Saver()
     
     with tf.Session() as session:
