@@ -59,8 +59,6 @@ def main(argv):
         batch_size = FLAGS.batch_size
 
         best_epoch = -1
-        # grace = 15
-        # counter = 0
 
         train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_german)
 
