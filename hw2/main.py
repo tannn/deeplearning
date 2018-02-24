@@ -115,16 +115,11 @@ def main(argv):
                 ##### just use gitk and look like 10 or 20 commits back
 
                 best_path_prefix = saver.save(session, os.path.join(save_dir, "homework_02"))
-
-
-
-
             print('--------------------')
 
-    
-    data_dir = '/work/cse496dl/shared/homework/02/SAVEE-British/'
-    train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(data_dir)
-    session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
+        data_dir = '/work/cse496dl/shared/homework/02/SAVEE-British/'
+        train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(data_dir)
+        session.run(tf.variables_initializer(optimizer_vars + dense_vars_english, name='init'))
 
 
 
