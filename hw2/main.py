@@ -49,11 +49,10 @@ def main(argv):
     optimizer_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "optimizer")
     dense_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
     dense_vars_english = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_english")
-    session.run(tf.variables_initializer(optimizer_vars + dense_vars_german, name='init'))
 
     with tf.Session() as session:
 
-        session.run(tf.global_variables_initializer())
+        session.run(tf.variables_initializer(optimizer_vars + dense_vars_german, name='init'))
 
         # run training
         batch_size = FLAGS.batch_size
