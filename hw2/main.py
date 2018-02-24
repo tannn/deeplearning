@@ -7,7 +7,8 @@ from util import *
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
 flags.DEFINE_integer('batch_size', 32, '')
-flags.DEFINE_integer('max_epoch_num', 6, '')
+flags.DEFINE_integer('max_epoch_num_german', 6, '')
+flags.DEFINE_integer('max_epoch_num_english', 50, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
@@ -62,7 +63,7 @@ def main(argv):
 
             print('Fold ' + str(fold))
 
-            for epoch in range(FLAGS.max_epoch_num):
+            for epoch in range(FLAGS.max_epoch_num_german):
                 print('Epoch: ' + str(epoch))
 
                 # run gradient steps and report mean loss on train data
@@ -97,6 +98,10 @@ def main(argv):
                     
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
+
+                ##### TODO: Add a saver line here
+                ##### can copy and paste the one from the old code
+                ##### just use gitk and look like 10 or 20 commits back
 
             print('--------------------')
 
