@@ -56,7 +56,7 @@ def main(argv):
             train_num_examples = train_images.shape[0]
             test_num_examples = test_images.shape[0]
 
-            print('Fold' + str(fold))
+            print('Fold ' + str(fold))
 
             for epoch in range(FLAGS.max_epoch_num):
                 print('Epoch: ' + str(epoch))
