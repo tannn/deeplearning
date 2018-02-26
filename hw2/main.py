@@ -9,7 +9,7 @@ flags.DEFINE_string('data_dir_german', '/work/cse496dl/shared/homework/02/EMODB-
 flags.DEFINE_string('data_dir_english', '/work/cse496dl/shared/homework/02/SAVEE-British/', 'directory where SAVEE-British is located')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num_german', 6, '')
-flags.DEFINE_integer('max_epoch_num_english', 50, '')
+flags.DEFINE_integer('max_epoch_num_english', 20, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
