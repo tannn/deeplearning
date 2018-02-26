@@ -108,7 +108,7 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + fold))
+                path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + str(fold)))
             print('--------------------')
 
         # Load English Data
