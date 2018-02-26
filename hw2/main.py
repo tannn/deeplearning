@@ -23,7 +23,7 @@ def main(argv):
     x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
-    flat = tf.reshape(conv_x, [-1, 17*17*filter_sizes[2]])
+    flat = tf.reshape(tf.stop_gradient(conv_x), [-1, 17*17*filter_sizes[2]])
 
 
     y = tf.placeholder(tf.float32, [None, 7], name='label')
