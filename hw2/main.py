@@ -53,7 +53,6 @@ def main(argv):
 
     with tf.Session() as session:
 
-        session.run(tf.global_variables_initializer())
 
         # run training
         batch_size = FLAGS.batch_size
@@ -63,6 +62,7 @@ def main(argv):
         train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_german)
 
         for fold in range(4):
+            session.run(tf.global_variables_initializer())
             train_images = train_images_list[fold]
             train_labels = train_labels_list[fold]
             test_images = test_images_list[fold]
@@ -113,10 +113,12 @@ def main(argv):
 
         # Load English Data
         train_images_list, train_labels_list, test_images_list, test_labels_list = load_data(FLAGS.data_dir_english)
-        session.run(tf.variables_initializer(optimizer_vars_english + dense_vars_english, name='init'))
+
+        print('English')
         
         # Begin English train loops
         for fold in range(4):
+            session.run(tf.variables_initializer(optimizer_vars_english + dense_vars_english, name='init'))
             train_images = train_images_list[fold]
             train_labels = train_labels_list[fold]
             test_images = test_images_list[fold]
