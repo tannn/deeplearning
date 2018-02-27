@@ -8,8 +8,8 @@ flags = tf.app.flags
 flags.DEFINE_string('data_dir_german', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
 flags.DEFINE_string('data_dir_english', '/work/cse496dl/shared/homework/02/SAVEE-British/', 'directory where SAVEE-British is located')
 flags.DEFINE_integer('batch_size', 32, '')
-flags.DEFINE_integer('max_epoch_num_german', 50, '')
-flags.DEFINE_integer('max_epoch_num_english', 50, '')
+flags.DEFINE_integer('max_epoch_num_german', 10, '')
+flags.DEFINE_integer('max_epoch_num_english', 10, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
