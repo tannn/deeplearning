@@ -8,8 +8,8 @@ flags = tf.app.flags
 flags.DEFINE_string('data_dir_german', '/work/cse496dl/shared/homework/02/EMODB-German/', 'directory where EMODB-German is located')
 flags.DEFINE_string('data_dir_english', '/work/cse496dl/shared/homework/02/SAVEE-British/', 'directory where SAVEE-British is located')
 flags.DEFINE_integer('batch_size', 32, '')
-flags.DEFINE_integer('max_epoch_num_german', 6, '')
-flags.DEFINE_integer('max_epoch_num_english', 20, '')
+flags.DEFINE_integer('max_epoch_num_german', 50, '')
+flags.DEFINE_integer('max_epoch_num_english', 50, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
@@ -108,7 +108,7 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + str(fold)))
+                path = saver.save(session, os.path.join(save_dir, "emodb_homework_2-0_" + str(fold)))
             print('--------------------')
 
         # Load English Data
@@ -164,7 +164,7 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                path = saver.save(session, os.path.join(save_dir, "homework_02_english_fold_" + str(fold)))
+                path = saver.save(session, os.path.join(save_dir, "savee_homework_2-0_" + str(fold)))
             print('--------------------')
 
 
