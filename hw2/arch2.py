@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 # ARCH 2 - Shallow convolution
 def my_conv_block(inputs, filters):
