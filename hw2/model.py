@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 def my_conv_block(inputs, filters):
     """
@@ -51,7 +52,7 @@ def get_dim(inputs):
         return inputs
     else:
         size = inputs.get_shape().as_list()[1:]
-        return [-1, sum(size)]
+        return [-1, np.prod(np.array(size))]
 
 def flatten(inputs):
     inputs_shape = get_dim(inputs)
