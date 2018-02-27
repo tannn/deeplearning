@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-# ARCH 2
+# ARCH 2 - Shallow convolution
 def my_conv_block(inputs, filters):
     """
     Args:
@@ -21,3 +21,10 @@ def dense_block(inputs):
     output_layer = tf.layers.dense(hidden_2, 7, name='output')
     return output_layer
 
+def optimizer_block(language, layer, label, rate):
+    with tf.name_scope('optimizer_'+ language) as scope:
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=layer)
+        optimizer = tf.train.AdamOptimizer(learning_rate=rate)
+        train_op = optimizer.minimize(cross_entropy)
+        
+        return optimizer, cross_entropy, train_op
