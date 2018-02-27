@@ -45,7 +45,7 @@ def flatten(inputs):
     Flattens a tensor along all non-batch dimensions.
     This is correctly a NOP if the input is already flat.
     """
-    if len(shape(inputs)) == 2:
+    if len(inputs.get_shape()) == 2:
         return inputs
     else:
         size = inputs.get_shape().as_list()[1:]
