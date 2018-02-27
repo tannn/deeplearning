@@ -17,8 +17,6 @@ def my_conv_block(inputs, filters):
 
 def dense_block(inputs, language):
     with tf.name_scope('dense_block_' + language) as scope:
-        print(inputs)
-        print(type(inputs))
         hidden_1 = tf.layers.dense(inputs, 
                                    512, 
                                    kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
