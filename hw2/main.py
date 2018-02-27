@@ -108,7 +108,7 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                path = saver.save(session, os.path.join(save_dir, "homework_02_german_fold_" + str(fold)))
+                path = saver.save(session, os.path.join(save_dir, "emodb_homework_2-0_" + str(fold)))
             print('--------------------')
 
         # Load English Data
@@ -164,7 +164,7 @@ def main(argv):
                 print('TEST CLASSIFICATION RATE: ' + str(test_class_rate))
                 print('--------------------')
 
-                path = saver.save(session, os.path.join(save_dir, "homework_02_english_fold_" + str(fold)))
+                path = saver.save(session, os.path.join(save_dir, "savee_homework_2-0_" + str(fold)))
             print('--------------------')
 
 
