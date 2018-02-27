@@ -41,7 +41,7 @@ def main(argv):
     # English
     flat_english = tf.stop_gradient(flat)
     output_dense_english = dense_block(flat_english, language="english")
-    output_english = tf.identity(output_dense_english, name='output')
+    output_english = tf.identity(output_dense_english, name='output2')
     confusion_matrix_op_english = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output_english, axis=1), num_classes=7)
 
     optimizer_english, cross_entropy_english, train_op_english = optimizer_block("english", output_dense_english, y, 0.001)
