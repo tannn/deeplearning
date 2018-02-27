@@ -23,7 +23,7 @@ def main(argv):
     x_reshaped = tf.reshape(x, [-1, 129, 129, 1])
     filter_sizes = [16, 32, 64]
     conv_x = my_conv_block(x_reshaped, filter_sizes)
-    flat = tf.reshape(tf.stop_gradient(conv_x), [-1, 17*17*filter_sizes[2]])
+    flat = flatten(conv_x)
 
     y = tf.placeholder(tf.float32, [None, 7], name='label')
 
@@ -39,7 +39,8 @@ def main(argv):
     dense_vars_german = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "dense_block_german")
 
     # English
-    output_dense_english = dense_block(flat, language="english")
+    flat_english = tf.stop_gradient(flat)
+    output_dense_english = dense_block(flat_english, language="english")
     output_english = tf.identity(output_dense_english, name='output')
     confusion_matrix_op_english = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output_english, axis=1), num_classes=7)
 

@@ -39,3 +39,14 @@ def optimizer_block(language, layer, label, rate):
         train_op = optimizer.minimize(cross_entropy)
         
         return optimizer, cross_entropy, train_op
+
+def flatten(inputs):
+    """
+    Flattens a tensor along all non-batch dimensions.
+    This is correctly a NOP if the input is already flat.
+    """
+    if len(shape(inputs)) == 2:
+        return inputs
+    else:
+        size = inputs.get_shape().as_list()[1:]
+        return [-1, size]
