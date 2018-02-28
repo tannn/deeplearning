@@ -8,11 +8,20 @@ def my_conv_block(inputs, filters):
         - filters: iterable of ints of length 3
     """
     with tf.name_scope('conv_block') as scope:
-        first_conv = tf.layers.conv2d(inputs, filters[0], 3, 1, padding='same')
+        first_conv = tf.layers.conv2d(inputs, filters[0], 3, 1, padding='same',
+                                      kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+                                      bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.), 
+                                    )
         pool_1 = tf.layers.max_pooling2d(first_conv, 2, 2, padding='same')
-        second_conv = tf.layers.conv2d(pool_1, filters[1], 3, 1, padding='same')
+        second_conv = tf.layers.conv2d(first_conv, filters[1], 3, 1, padding='same',
+                                       kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+                                       bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.), 
+                                    )
         pool_2 = tf.layers.max_pooling2d(second_conv, 2, 2, padding='same')
-        third_conv = tf.layers.conv2d(pool_2, filters[2], 3, 1, padding='same')
+        third_conv = tf.layers.conv2d(pool_1, filters[2], 3, 1, padding='same',
+                                      kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+                                      bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.), 
+                                    )
         pool_3 = tf.layers.max_pooling2d(third_conv, 2, 2, padding='same')
         return pool_3
 
