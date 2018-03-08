@@ -1,6 +1,14 @@
 import tensorflow as tf
 import numpy as np
 
+def upscale_block(x, scale=2):
+    """ conv2d_transpose """
+    return tf.layers.conv2d_transpose(x, 3, 3, strides=(scale, scale), padding='same', activation=tf.nn.relu)
+
+def downscale_block(x, scale=2):
+    n, h, w, c = x.get_shape().as_list()
+    return tf.layers.conv2d(x, np.floor(c * 1.25), 3, strides=scale, padding='same')
+
 def my_conv_block(inputs, filters):
     """
     Args:
