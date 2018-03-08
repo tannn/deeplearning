@@ -17,8 +17,8 @@ def main(argv):
 
     save_dir = '/work/' + path_string + '/homework03/logs'
 
-    cifar10_train_data = np.load(cifar_dir + 'cifar10_train_data.npy')
-    cifar10_test_data = np.load(cifar_dir + 'cifar10_test_data.npy')
+    cifar10_train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
+    cifar10_test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
 
 
 if __name__ == "__main__":
