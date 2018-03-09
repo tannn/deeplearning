@@ -31,7 +31,7 @@ def main(argv):
 
     encoder_16 = downscale_block(x)
     encoder_8 = downscale_block(encoder_16)
-    flat = flatten(enecoder_8)
+    flat = flatten(encoder_8)
     code = tf.layers.dense(flat, 40, activation=tf.nn.relu, name='encoder_output')
     #TODO: create the code as a flatten -> dense 
 
