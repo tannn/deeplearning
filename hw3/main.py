@@ -6,7 +6,6 @@ from util import *
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/hackathon/05/', 'directory where CIFAR 10 is located')
-flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('max_epoch_num', 50, '')
 FLAGS = flags.FLAGS
 
@@ -46,22 +45,25 @@ def main(argv):
 
     with tf.Session() as session:
 
-        psnr_vals = []
-        for i in range(train_data // batch_size):
-            batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-            train_psnr = session.run([psnr], {x: batch_xs})
-            psnr_vals.append(train_psnr)
-        avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
-        print('Train PSNR: ' + str(avg_train_psnr))
+        for epoch in range(FLAGS.max_epoch_num):
+            print('Epoch: ' + str(epoch))
 
-        psnr_vals = []
-        for i in range(test_data // batch_size):
-            batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
-            test_psnr = session.run([psnr], {x: batch_xs})
-            psnr_vals.append(test_psnr)
-        avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
-        print('Test PSNR: ' + str(avg_test_psnr))
+            psnr_vals = []
+            for i in range(train_data // batch_size):
+                batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
+                train_psnr = session.run([psnr], {x: batch_xs})
+                psnr_vals.append(train_psnr)
+            avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
+            print('Train PSNR: ' + str(avg_train_psnr))
 
+            psnr_vals = []
+            for i in range(test_data // batch_size):
+                batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
+                test_psnr = session.run([psnr], {x: batch_xs})
+                psnr_vals.append(test_psnr)
+            avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
+            print('Test PSNR: ' + str(avg_test_psnr))
+            print('--------------------')
 
 
 
