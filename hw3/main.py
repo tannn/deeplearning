@@ -31,6 +31,8 @@ def main(argv):
 
     code = downscale_block(downscale_block(x))
     code = tf.identity(code, name='encoder_output')
+    #TODO: create the code as a flatten -> dense 
+
     decoder_input = tf.identity(code, name="decoder_input")
 
     # Todo: upscale and output
