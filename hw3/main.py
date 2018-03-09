@@ -21,6 +21,11 @@ def main(argv):
     train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
     test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
 
+    train_num_examples = train_data.shape[0]
+    test_num_examples = test_data.shape[0]
+
+    print(train_data.shape)
+
     #TODO: Reshape incoming data to be square
 
     x = tf.placeholder(shape=[None, 32, 32, 3], dtype=tf.float32, name='encoder_input')
@@ -47,7 +52,7 @@ def main(argv):
     with tf.Session() as session:
 
         psnr_vals = []
-        for i in range(train_data // batch_size):
+        for i in range(train_num_examples // batch_size):
             batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
             train_psnr = session.run([psnr], {x: batch_xs})
             psnr_vals.append(train_psnr)
@@ -55,7 +60,7 @@ def main(argv):
         print('Train PSNR: ' + str(avg_train_psnr))
 
         psnr_vals = []
-        for i in range(test_data // batch_size):
+        for i in range(test_num_examples // batch_size):
             batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
             test_psnr = session.run([psnr], {x: batch_xs})
             psnr_vals.append(test_psnr)
