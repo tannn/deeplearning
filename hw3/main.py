@@ -40,7 +40,7 @@ def main(argv):
 
     with tf.name_scope('optimizer') as scope:
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
-        train_op = optimizer.minimize(PSNR)
+        train_op = optimizer.minimize(psnr)
 
 
     with tf.Session() as session:
