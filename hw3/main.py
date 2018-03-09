@@ -17,33 +17,48 @@ def main(argv):
 
     save_dir = '/work/' + path_string + '/homework03/logs'
 
-    cifar10_train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
-    cifar10_test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
+    train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
+    test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
 
-    x = tf.placeholder(shape=[None, 16641], dtype=tf.float32, name='input_placeholder')
+    #TODO: Reshape incoming data to be square
 
-    output_dense = dense_block(flat_english, language="english")
-    output = tf.identity(output_dense_english, name='output2')
+    x = tf.placeholder(shape=[None, 32, 32, 3], dtype=tf.float32, name='encoder_input')
 
-    optimizer, cross_entropy, train_op = optimizer_block("english", output_dense, y, 0.001)
-    sum_cross_entropy = tf.reduce_mean(cross_entropy_english)
+    code = downscale_block(downscale_block(x))
+    code = tf.identity(code, name='encoder_output')
+    decoder_input = tf.identity(code, name="decoder_input")
+
+    # Todo: upscale and output
+    output = upscale_block(upscale_block(decoder_input))
+    decoder_output = tf.identity(output, name="decoder_output")
 
     #peak signal to noise ratio
-    mse = tf.reduce_mean(tf.squared_difference(image_target,output))
-    PSNR = tf.constant(255**2,dtype=tf.float32)
-    PSNR = tf.constant(10,dtype=tf.float32)*utils.log10(PSNR) * 20
+    mse = tf.reduce_mean(tf.squared_difference(output, x))
+    PSNR = tf.constant(255**2, dtype=tf.float32)
+    PSNR = tf.constant(10, dtype=tf.float32)*utils.log10(PSNR) * 20
+
+    with tf.name_scope('optimizer') as scope:
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
+        train_op = optimizer.minimize(PSNR)
 
 
     with tf.Session() as session:
 
+        psnr_vals = []
+        for i in range(train_data // batch_size):
+            batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
+            train_psnr = session.run([PSNR], {x: batch_xs})
+            psnr_vals.append(train_psnr)
+        avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
+        print('Train PSNR: ' + str(avg_train_psnr))
 
-        ce_vals = []
-        for i in range(test_num_examples // batch_size):
-            batch_xs = test_images[i*batch_size:(i+1)*batch_size, :]
-            test_ce = session.run([sum_cross_entropy], {x: batch_xs})
-            ce_vals.append(test_ce)
-        avg_test_ce = sum(ce_vals) / len(ce_vals)
-        print('TEST CROSS ENTROPY: ' + str(avg_test_ce))
+        psnr_vals = []
+        for i in range(test_data // batch_size):
+            batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
+            test_psnr = session.run([PSNR], {x: batch_xs})
+            psnr_vals.append(test_psnr)
+        avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
+        print('Test PSNR: ' + str(avg_test_psnr))
 
 
 

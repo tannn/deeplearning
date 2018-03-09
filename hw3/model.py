@@ -50,14 +50,6 @@ def dense_block(inputs, language):
         output_layer = tf.layers.dense(hidden_2, 7, name=language + "_output")
         return output_layer
 
-def optimizer_block(language, layer, label, rate):
-    with tf.name_scope('optimizer_'+ language) as scope:
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=layer)
-        optimizer = tf.train.AdamOptimizer(learning_rate=rate)
-        train_op = optimizer.minimize(cross_entropy)
-        
-        return optimizer, cross_entropy, train_op
-
 def get_dim(inputs):
     """
     Flattens a tensor along all non-batch dimensions.
