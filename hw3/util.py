@@ -8,8 +8,7 @@ def load_sesh(pathname, meta_file, network_name):
     print(session.graph.get_operations())
 
 def log_10(tensor):
-    tensor = tf.cast(tensor, tf.float32)
-    return tf.log(tensor) / tf.log(tf.constant(10))
+    return tf.log(tensor) / tf.log(tf.constant(10.))
 
 def split_data(data, labels, proportion):
     """
