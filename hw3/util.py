@@ -7,6 +7,9 @@ def load_sesh(pathname, meta_file, network_name):
     saver.restore(session, pathname + network_name)
     print(session.graph.get_operations())
 
+def log_10(tensor):
+    return tf.log(tensor) / tf.log(tf.contstant(10))
+
 def split_data(data, labels, proportion):
     """
     Split a numpy array into two parts of `proportion` and `1 - proportion`

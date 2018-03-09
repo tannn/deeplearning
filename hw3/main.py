@@ -34,8 +34,9 @@ def main(argv):
 
     #peak signal to noise ratio
     mse = tf.reduce_mean(tf.squared_difference(output, x))
-    PSNR = tf.constant(255**2, dtype=tf.float32)
-    PSNR = tf.constant(10, dtype=tf.float32)*utils.log10(PSNR) * 20
+    psnr_1 = 20 * log_10(tf.constant(255**2, dtype=tf.float32))
+    psnr_2 = 10 * log_10(mse)
+    psnr = psnr_1 - psnr_2
 
     with tf.name_scope('optimizer') as scope:
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
@@ -47,7 +48,7 @@ def main(argv):
         psnr_vals = []
         for i in range(train_data // batch_size):
             batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-            train_psnr = session.run([PSNR], {x: batch_xs})
+            train_psnr = session.run([psnr], {x: batch_xs})
             psnr_vals.append(train_psnr)
         avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
         print('Train PSNR: ' + str(avg_train_psnr))
@@ -55,7 +56,7 @@ def main(argv):
         psnr_vals = []
         for i in range(test_data // batch_size):
             batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
-            test_psnr = session.run([PSNR], {x: batch_xs})
+            test_psnr = session.run([psnr], {x: batch_xs})
             psnr_vals.append(test_psnr)
         avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
         print('Test PSNR: ' + str(avg_test_psnr))
