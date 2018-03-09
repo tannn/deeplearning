@@ -8,7 +8,7 @@ def upscale_block(x, scale=2):
 
 def downscale_block(x, scale=2):
     n, h, w, c = x.get_shape().as_list()
-    return tf.layers.conv2d(x, np.floor(c * 1.25), 3, strides=scale, padding='same')
+    return tf.layers.conv2d(x, np.floor(c * 1.25), 3, strides=scale, padding='same', activation=tf.nn.relu)
 
 def get_dim(inputs):
     """
