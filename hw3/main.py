@@ -40,7 +40,7 @@ def main(argv):
     decoder_8 = tf.reshape(hidden_decoder, [-1, 8, 8, 3])
 
     # Todo: upscale and output
-    decoder_16 = upscale_block(decoder_input)
+    decoder_16 = upscale_block(decoder_8)
     decoder_32 = upscale_block(decoder_16)
     decoder_output = tf.identity(decoder_32, name="decoder_output")
 
