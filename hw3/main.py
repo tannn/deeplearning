@@ -29,20 +29,9 @@ def main(argv):
 
     x = tf.placeholder(shape=[None, 32, 32, 3], dtype=tf.float32, name='encoder_input')
 
-    encoder_16 = downscale_block(x)
-    encoder_8 = downscale_block(encoder_16)
-    flat = flatten(encoder_8)
-    code = tf.layers.dense(flat, 40, activation=tf.nn.relu, name='encoder_output')
     #TODO: create the code as a flatten -> dense 
 
-    decoder_input = tf.identity(code, name="decoder_input")
-    hidden_decoder = tf.layers.dense(decoder_input, 192, activation=tf.nn.relu)
-    decoder_8 = tf.reshape(hidden_decoder, [-1, 8, 8, 3])
-
-    # Todo: upscale and output
-    decoder_16 = upscale_block(decoder_8)
-    decoder_32 = upscale_block(decoder_16)
-    decoder_output = tf.identity(decoder_32, name="decoder_output")
+    decoder_output = autoencoder_network(x)
 
     #peak signal to noise ratio
     mse = tf.reduce_mean(tf.squared_difference(decoder_output, x))
