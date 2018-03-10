@@ -72,7 +72,7 @@ def main(argv):
             print('Test PSNR: ' + str(avg_test_psnr))
             print('--------------------')
 
-            path = saver.save(session, os.path.join(save_dir, "cifar_homework_1-0"))
+            path = saver.save(session, os.path.join(save_dir, "maxcompression_encoder_homework_3-0"))
 
 
 
