@@ -50,6 +50,9 @@ def main(argv):
     psnr_2 = 10 * log_10(mse)
     psnr = psnr_1 - psnr_2
 
+    # Define saver tensor 
+    saver = tf.train.Saver()
+
     with tf.name_scope('optimizer') as scope:
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
         train_op = optimizer.minimize(psnr)
@@ -79,6 +82,8 @@ def main(argv):
             avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
             print('Test PSNR: ' + str(avg_test_psnr))
             print('--------------------')
+
+            path = saver.save(session, os.path.join(save_dir, "cifar_homework_1-0"))
 
 
 
