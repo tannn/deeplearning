@@ -57,6 +57,9 @@ def main(argv):
 
     with tf.Session() as session:
 
+        session.run(tf.global_variables_initializer())
+
+
         for epoch in range(FLAGS.max_epoch_num):
             print('Epoch: ' + str(epoch))
 
