@@ -37,14 +37,14 @@ def main(argv):
     mse = tf.reduce_mean(tf.squared_difference(decoder_output, x))
     psnr_1 = 20 * log_10(tf.constant(255**2, dtype=tf.float32))
     psnr_2 = 10 * log_10(mse)
-    psnr = psnr_1 - psnr_2
+    negative_psnr = psnr_2 - psnr_1
 
     # Define saver tensor 
     saver = tf.train.Saver()
 
     with tf.name_scope('optimizer') as scope:
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
-        train_op = optimizer.maximize(psnr)
+        train_op = optimizer.minimize(negative_psnr)
 
 
     with tf.Session() as session:
@@ -58,7 +58,8 @@ def main(argv):
             psnr_vals = []
             for i in range(train_num_examples // batch_size):
                 batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-                _, train_psnr = session.run([train_op, psnr], {x: batch_xs})
+                _, train_psnr = session.run([train_op, negative_psnr], {x: batch_xs})
+                train_psnr *= -1
                 psnr_vals.append(train_psnr)
             avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
             print('Train PSNR: ' + str(avg_train_psnr))
@@ -66,7 +67,8 @@ def main(argv):
             psnr_vals = []
             for i in range(test_num_examples // batch_size):
                 batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
-                test_psnr = session.run(psnr, {x: batch_xs})
+                test_psnr = session.run(negative_psnr, {x: batch_xs})
+                test_psnr *= -1
                 psnr_vals.append(test_psnr)
             avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
             print('Test PSNR: ' + str(avg_test_psnr))
