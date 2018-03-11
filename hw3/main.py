@@ -15,7 +15,7 @@ def main(argv):
     with open("path.txt", "r") as f: 
         path_string = f.read().split(sep='\n')[0]
 
-    grace = 15
+    grace = 10
     counter = 0
 
     save_dir = '/work/' + path_string + '/homework03/logs'
