@@ -56,3 +56,17 @@ def load_data(data_dir):
     test_labels_list = [test_labels_1, test_labels_2, test_labels_3, test_labels_4]
 
     return train_images_list, train_labels_list, test_images_list, test_labels_list
+
+def split_data(data, proportion):
+    """
+    Split a numpy array into two parts of `proportion` and `1 - proportion`
+    
+    Args:
+        - data: numpy array of data, to be split along the first axis
+        - proportion: a float less than 1  
+    """
+    size = data.shape[0]
+    np.random.seed(69)
+    s = np.random.permutation(size)
+    split_idx = int(proportion * size)
+    return data[s[:split_idx]], data[s[split_idx:]]

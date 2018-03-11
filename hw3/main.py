@@ -15,15 +15,22 @@ def main(argv):
     with open("path.txt", "r") as f: 
         path_string = f.read().split(sep='\n')[0]
 
+    grace = 15
+    counter = 0
+
     save_dir = '/work/' + path_string + '/homework03/logs'
 
     train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
     test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
 
-    train_num_examples = train_data.shape[0]
+    valid_images, train_images = split_data(train_data, 0.1)
+
+    train_num_examples = train_images.shape[0]
     test_num_examples = test_data.shape[0]
+    valid_num_examples = valid_images.shape[0]
 
     print(train_data.shape)
+    best_class_rate = float("-inf")
 
     #TODO: Reshape incoming data to be square
 
@@ -72,8 +79,31 @@ def main(argv):
                 psnr_vals.append(test_psnr)
             avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
             print('Test PSNR: ' + str(avg_test_psnr))
-            print('--------------------')
 
+
+            # report mean validation loss
+            psnr_vals = []
+            for i in range(valid_num_examples // batch_size):
+                batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
+                valid_psnr = session.run(negative_psnr, {x: batch_xs})
+                valid_psnr *= -1
+                psnr_vals.append(valid_psnr)
+            avg_valid_psnr = sum(psnr_vals) / len(psnr_vals)
+            print('Valid PSNR: ' + str(avg_valid_psnr))
+
+            if (avg_valid_psnr > best_class_rate):
+                print('New best found!')
+                best_train_loss = avg_train_ce
+                best_valid_loss = avg_valid_ce
+                best_epoch = epoch
+                counter = 0
+            else:
+                counter = counter + 1
+
+            if counter >= grace:
+                break
+
+            print('--------------------')
             saver.save(session, os.path.join(save_dir, "maxcompression_encoder_homework_3-0"))
             saver.save(session, os.path.join(save_dir, "maxquality_encoder_homework_3-0"))
             saver.save(session, os.path.join(save_dir, "maxcompression_decoder_homework_3-0"))
