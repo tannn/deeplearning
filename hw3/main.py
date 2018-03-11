@@ -93,7 +93,7 @@ def main(argv):
 
             if (avg_valid_psnr > best_class_rate):
                 print('New best found!')
-                best_train_loss = avg_train_psr
+                best_train_loss = avg_train_psnr
                 best_valid_loss = avg_valid_psnr
                 best_epoch = epoch
                 counter = 0
