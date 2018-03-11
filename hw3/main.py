@@ -30,7 +30,7 @@ def main(argv):
     valid_num_examples = valid_images.shape[0]
 
     print(train_data.shape)
-    best_class_rate = float("-inf")
+    best_valid_psnr = float("-inf")
 
     #TODO: Reshape incoming data to be square
 
@@ -91,10 +91,10 @@ def main(argv):
             avg_valid_psnr = sum(psnr_vals) / len(psnr_vals)
             print('Valid PSNR: ' + str(avg_valid_psnr))
 
-            if (avg_valid_psnr > best_class_rate):
+            if (avg_valid_psnr > best_valid_psnr):
                 print('New best found!')
-                best_train_loss = avg_train_psnr
-                best_valid_loss = avg_valid_psnr
+                best_train_psnr = avg_train_psnr
+                best_valid_psnr = avg_valid_psnr
                 best_epoch = epoch
                 counter = 0
             else:
