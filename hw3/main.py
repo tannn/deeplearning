@@ -97,6 +97,10 @@ def main(argv):
                 best_valid_psnr = avg_valid_psnr
                 best_epoch = epoch
                 counter = 0
+                saver.save(session, os.path.join(save_dir, "maxcompression_encoder_homework_3-0"))
+                saver.save(session, os.path.join(save_dir, "maxquality_encoder_homework_3-0"))
+                saver.save(session, os.path.join(save_dir, "maxcompression_decoder_homework_3-0"))
+                saver.save(session, os.path.join(save_dir, "maxquality_decoder_homework_3-0"))
             else:
                 counter = counter + 1
 
@@ -104,10 +108,6 @@ def main(argv):
                 break
 
             print('--------------------')
-            saver.save(session, os.path.join(save_dir, "maxcompression_encoder_homework_3-0"))
-            saver.save(session, os.path.join(save_dir, "maxquality_encoder_homework_3-0"))
-            saver.save(session, os.path.join(save_dir, "maxcompression_decoder_homework_3-0"))
-            saver.save(session, os.path.join(save_dir, "maxquality_decoder_homework_3-0"))
 
 
 
