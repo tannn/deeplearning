@@ -58,7 +58,7 @@ def main(argv):
             psnr_vals = []
             for i in range(train_num_examples // batch_size):
                 batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-                train_psnr = session.run(psnr, {x: batch_xs})
+                _, train_psnr = session.run([train_op, psnr], {x: batch_xs})
                 psnr_vals.append(train_psnr)
             avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
             print('Train PSNR: ' + str(avg_train_psnr))
