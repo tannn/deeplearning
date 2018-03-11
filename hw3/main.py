@@ -72,7 +72,10 @@ def main(argv):
             print('Test PSNR: ' + str(avg_test_psnr))
             print('--------------------')
 
-            path = saver.save(session, os.path.join(save_dir, "maxcompression_encoder_homework_3-0"))
+            saver.save(session, os.path.join(save_dir, "maxcompression_encoder_homework_3-0"))
+            saver.save(session, os.path.join(save_dir, "maxquality_encoder_homework_3-0"))
+            saver.save(session, os.path.join(save_dir, "maxcompression_decoder_homework_3-0"))
+            saver.save(session, os.path.join(save_dir, "maxquality_decoder_homework_3-0"))
 
 
 
