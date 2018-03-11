@@ -23,7 +23,7 @@ def main(argv):
     train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
     test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
 
-    valid_images, train_images = split_data(train_data, 0.1)
+    valid_images, train_images = split_data(train_data)
 
     train_num_examples = train_images.shape[0]
     test_num_examples = test_data.shape[0]
@@ -93,8 +93,8 @@ def main(argv):
 
             if (avg_valid_psnr > best_class_rate):
                 print('New best found!')
-                best_train_loss = avg_train_ce
-                best_valid_loss = avg_valid_ce
+                best_train_loss = avg_train_psr
+                best_valid_loss = avg_valid_psnr
                 best_epoch = epoch
                 counter = 0
             else:
