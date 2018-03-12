@@ -27,7 +27,7 @@ def main(argv):
     valid_num_examples = valid_images.shape[0]
 
     keep_prob = 0.8
-    grace = 15
+    grace = 10
     counter = 0
 
     keep_prob_updater_rate = 0.05

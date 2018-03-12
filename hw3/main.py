@@ -38,7 +38,8 @@ def main(argv):
 
     #TODO: create the code as a flatten -> dense 
 
-    decoder_output = autoencoder_network(x)
+    code, decoder_input, decoder_output = autoencoder_network(x)
+    tf.identity(code, name="encoder_output")
 
     #peak signal to noise ratio
     mse = tf.reduce_mean(tf.squared_difference(decoder_output, x))

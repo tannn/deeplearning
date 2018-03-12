@@ -30,7 +30,8 @@ def autoencoder_network(x):
     encoder_16 = downscale_block(x)
     encoder_8 = downscale_block(encoder_16)
     flat = flatten(encoder_8)
-    code = tf.layers.dense(flat, 40, activation=tf.nn.relu, name='encoder_output')
+    code = tf.layers.dense(flat, 40, activation=tf.nn.relu)
+    #tf.identity(code, name="encoder_output")
 
     decoder_input = tf.identity(code, name="decoder_input")
     hidden_decoder = tf.layers.dense(decoder_input, 192, activation=tf.nn.relu)
@@ -40,4 +41,4 @@ def autoencoder_network(x):
     decoder_32 = upscale_block(decoder_16)
     decoder_output = tf.identity(decoder_32, name="decoder_output")
 
-    return decoder_output
+    return code, decoder_input, decoder_output
