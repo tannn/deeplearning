@@ -2,6 +2,13 @@ import tensorflow as tf
 import numpy as np
 
 # Upscale and Downscale blocks taken from Paul Quint
+def upscale_block_with_l2(x, scale=2):
+    """ conv2d_transpose """
+    return tf.layers.conv2d_transpose(x, 3, 3, strides=(scale, scale), 
+                                               padding='same',
+                                               kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+                                               bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.), 
+                                               activation=tf.nn.relu)
 def upscale_block(x, scale=2):
     """ conv2d_transpose """
     return tf.layers.conv2d_transpose(x, 3, 3, strides=(scale, scale), padding='same', activation=tf.nn.relu)
@@ -9,6 +16,14 @@ def upscale_block(x, scale=2):
 def downscale_block(x, scale=2):
     n, h, w, c = x.get_shape().as_list()
     return tf.layers.conv2d(x, np.floor(c * 1.25), 3, strides=scale, padding='same', activation=tf.nn.relu)
+
+def downscale_block_with_l2(x, scale=2):
+    n, h, w, c = x.get_shape().as_list()
+    return tf.layers.conv2d(x, np.floor(c * 1.25), 3, strides=scale, 
+                                                      padding='same',
+                                                      kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+                                                      bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.), 
+                                                      activation=tf.nn.relu)
 
 def get_dim(inputs):
     """
@@ -36,6 +51,22 @@ def autoencoder_network(x):
     hidden_decoder = tf.layers.dense(decoder_input, 768, activation=tf.nn.relu)
     decoder_16 = tf.reshape(hidden_decoder, [-1, 16, 16, 3])
     decoder_32 = upscale_block(decoder_16)
+    decoder_output = tf.identity(decoder_32, name="decoder_output")
+
+    return code, decoder_input, decoder_output
+
+def autoencoder_network_with_l2(x):
+    encoder_16 = downscale_block_with_l2(x)
+    flat = flatten(encoder_16)
+    code = tf.layers.dense(flat, 100, activation=tf.nn.relu)
+    #tf.identity(code, name="encoder_output")
+
+    decoder_input = tf.identity(code, name="decoder_input")
+    hidden_decoder = tf.layers.dense(decoder_input, 768, activation=tf.nn.relu,
+                                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
+                                                         bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.))
+    decoder_16 = tf.reshape(hidden_decoder, [-1, 16, 16, 3])
+    decoder_32 = upscale_block_with_l2(decoder_16)
     decoder_output = tf.identity(decoder_32, name="decoder_output")
 
     return code, decoder_input, decoder_output
