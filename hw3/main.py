@@ -46,7 +46,7 @@ def main(argv):
 
     #peak signal to noise ratio
     mse = tf.reduce_mean(tf.squared_difference(decoder_output, x))
-    psnr_1 = 20 * log_10(tf.constant(255**2, dtype=tf.float32))
+    psnr_1 = 20 * log_10(tf.constant(255, dtype=tf.float32))
     psnr_2 = 10 * log_10(mse)
    
     negative_psnr = psnr_2 - psnr_1
