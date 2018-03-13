@@ -17,6 +17,7 @@ def main(argv):
 
     grace = 10
     counter = 0
+    epoch = 0
 
     save_dir = '/work/' + path_string + '/homework03/logs'
     data_dir = '/work/' + path_string + '/homework03/cifar100/' 
@@ -60,8 +61,7 @@ def main(argv):
 
         session.run(tf.global_variables_initializer())
 
-
-        for epoch in range(FLAGS.max_epoch_num):
+        while True:
             print('Epoch: ' + str(epoch))
 
             psnr_vals = []
@@ -110,7 +110,7 @@ def main(argv):
                 break
 
             print('--------------------')
-
+            epoch = epoch + 1
 
 
 
