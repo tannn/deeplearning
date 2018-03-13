@@ -43,12 +43,14 @@ def flatten(inputs):
 
 def autoencoder_network(x):
     encoder_16 = downscale_block(x)
-    flat = flatten(encoder_16)
-    code = tf.layers.dense(flat, 400, activation=tf.nn.relu)
+    encoder_8 = downscale_block(encoder_16)
+    flat = flatten(encoder_8)
+    code = tf.layers.dense(flat, 100, activation=tf.nn.relu)
 
     decoder_input = tf.identity(code, name="decoder_input")
-    hidden_decoder = tf.layers.dense(decoder_input, 768, activation=tf.nn.relu)
-    decoder_16 = tf.reshape(hidden_decoder, [-1, 16, 16, 3])
+    hidden_decoder = tf.layers.dense(decoder_input, 192, activation=tf.nn.relu)
+    decoder_8 = tf.reshape(hidden_decoder, [-1, 8, 8, 3])
+    decoder_16 = upscale_block(decoder_8)
     decoder_32 = upscale_block(decoder_16)
     decoder_output = tf.identity(decoder_32, name="decoder_output")
 
@@ -57,17 +59,23 @@ def autoencoder_network(x):
 
 def autoencoder_network_with_l2(x):
     encoder_16 = downscale_block_with_l2(x)
-    flat = flatten(encoder_16)
-    code = tf.layers.dense(flat, 400, activation=tf.nn.relu)
-    #tf.identity(code, name="encoder_output")
+    encoder_8 = downscale_block_with_l2(encoder_16)
+    flat = flatten(encoder_8)
+    code = tf.layers.dense(flat, 100, activation=tf.nn.relu)
 
     decoder_input = tf.identity(code, name="decoder_input")
-    hidden_decoder = tf.layers.dense(decoder_input, 768, activation=tf.nn.relu,
+    hidden_decoder = tf.layers.dense(decoder_input, 192, activation=tf.nn.relu,
                                                          kernel_regularizer=tf.contrib.layers.l2_regularizer(scale=1.),
                                                          bias_regularizer=tf.contrib.layers.l2_regularizer(scale=1.))
-    decoder_16 = tf.reshape(hidden_decoder, [-1, 16, 16, 3])
+    decoder_8 = tf.reshape(hidden_decoder, [-1, 8, 8, 3])
+    decoder_16 = upscale_block_with_l2(decoder_8)
     decoder_32 = upscale_block_with_l2(decoder_16)
     decoder_output = tf.identity(decoder_32, name="decoder_output")
 
     return code, decoder_input, decoder_output
+
+
+def autoencoder_network_max_compression(x):
+    flat = flatten(x)
+
 
