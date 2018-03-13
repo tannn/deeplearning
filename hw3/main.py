@@ -11,6 +11,7 @@ FLAGS = flags.FLAGS
 
 def main(argv):
     batch_size = 32
+    
     # load text file
     with open("path.txt", "r") as f: 
         path_string = f.read().split(sep='\n')[0]
@@ -40,21 +41,26 @@ def main(argv):
 
     #TODO: create the code as a flatten -> dense 
 
-    code, decoder_input, decoder_output = autoencoder_network(x)
+    code, decoder_input, decoder_output = autoencoder_network_with_l2(x)
     tf.identity(code, name="encoder_output")
 
     #peak signal to noise ratio
     mse = tf.reduce_mean(tf.squared_difference(decoder_output, x))
     psnr_1 = 20 * log_10(tf.constant(255**2, dtype=tf.float32))
     psnr_2 = 10 * log_10(mse)
+   
     negative_psnr = psnr_2 - psnr_1
+   
+    REG_COEF = 0.001
+    regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+    total_loss = negative_psnr + REG_COEF * sum(regularization_losses)
 
     # Define saver tensor 
     saver = tf.train.Saver()
 
     with tf.name_scope('optimizer') as scope:
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
-        train_op = optimizer.minimize(negative_psnr)
+        train_op = optimizer.minimize(total_loss)
 
 
     with tf.Session() as session:
