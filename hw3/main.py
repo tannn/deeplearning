@@ -10,13 +10,13 @@ flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
-    batch_size = 32
+    batch_size = 64
     
     # load text file
     with open("path.txt", "r") as f: 
         path_string = f.read().split(sep='\n')[0]
 
-    grace = 10
+    grace = 20
     counter = 0
     epoch = 0
 
