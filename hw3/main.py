@@ -19,9 +19,10 @@ def main(argv):
     counter = 0
 
     save_dir = '/work/' + path_string + '/homework03/logs'
+    data_dir = '/work/' + path_string + '/homework03/cifar100/' 
 
-    train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
-    test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
+    train_data = np.load(data_dir + 'x_train.npy')
+    test_data = np.load(data_dir + 'x_test.npy')
 
     valid_images, train_images = split_data(train_data)
 
