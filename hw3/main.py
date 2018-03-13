@@ -6,7 +6,7 @@ from util import *
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/hackathon/05/', 'directory where CIFAR 10 is located')
-flags.DEFINE_integer('max_epoch_num', 50, '')
+flags.DEFINE_integer('max_epoch_num', 100, '')
 FLAGS = flags.FLAGS
 
 def main(argv):
@@ -20,9 +20,10 @@ def main(argv):
     counter = 0
 
     save_dir = '/work/' + path_string + '/homework03/logs'
+    data_dir = '/work/' + path_string + '/homework03/cifar100/' 
 
-    train_data = np.load(FLAGS.data_dir + 'cifar10_train_data.npy')
-    test_data = np.load(FLAGS.data_dir + 'cifar10_test_data.npy')
+    train_data = np.load(data_dir + 'x_train.npy')
+    test_data = np.load(data_dir + 'x_test.npy')
 
     valid_images, train_images = split_data(train_data)
 
