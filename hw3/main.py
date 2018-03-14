@@ -51,7 +51,7 @@ def main(argv):
    
     negative_psnr = psnr_2 - psnr_1
    
-    REG_COEF = 0.001
+    REG_COEF = 0.01
     regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
     total_loss = negative_psnr + REG_COEF * sum(regularization_losses)
 
