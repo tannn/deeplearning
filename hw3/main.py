@@ -4,11 +4,6 @@ import numpy as np
 from model import *
 from util import *
 
-flags = tf.app.flags
-flags.DEFINE_string('data_dir', '/work/cse496dl/shared/hackathon/05/', 'directory where CIFAR 10 is located')
-flags.DEFINE_integer('max_epoch_num', 100, '')
-FLAGS = flags.FLAGS
-
 def main(argv):
     batch_size = 32
     
