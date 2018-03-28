@@ -4,19 +4,14 @@ import numpy as np
 from model import *
 from util import *
 
-flags = tf.app.flags
-flags.DEFINE_string('data_dir', '/work/cse496dl/shared/hackathon/05/', 'directory where CIFAR 10 is located')
-flags.DEFINE_integer('max_epoch_num', 100, '')
-FLAGS = flags.FLAGS
-
 def main(argv):
-    batch_size = 64
+    batch_size = 32
     
     # load text file
     with open("path.txt", "r") as f: 
         path_string = f.read().split(sep='\n')[0]
 
-    grace = 20
+    grace = 10
     counter = 0
     epoch = 0
 

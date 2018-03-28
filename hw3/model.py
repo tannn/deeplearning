@@ -75,7 +75,29 @@ def autoencoder_network_with_l2(x):
     return code, decoder_input, decoder_output
 
 
+def fake_autoencoder(x):
+    flat = flatten(x)
+    hidden_1 = tf.layers.dense(flat, 3072, activation=tf.nn.relu, kernel_initializer=tf.ones_initializer)
+    hidden_1 = hidden_1 / 3072
+    code = tf.cast(hidden_1, dtype=tf.uint8)
+    decoder_input = tf.identity(code, name="decoder_input")
+    decoder = tf.cast(decoder_input, dtype=tf.float32)
+    hidden_2 = tf.layers.dense(decoder, 3072, activation=tf.nn.relu, kernel_initializer=tf.ones_initializer)
+    hidden_2 = hidden_2 / 3072
+    square = tf.reshape(hidden_2, [-1, 32, 32, 3])
+    decoder_output = tf.identity(square, name="decoder_output")
+
+    return code, decoder_input, decoder_output
+
 def autoencoder_network_max_compression(x):
     flat = flatten(x)
+    code = tf.cast(flat, dtype=tf.uint8)
+    code = code // 2
+    code = code * 2
+    decoder_input = tf.identity(code, name="decoder_input")
+    decoder = tf.cast(decoder_input, dtype=tf.float32)
+    square = tf.reshape(decoder, [-1, 32, 32, 3])
+    decoder_output = tf.identity(square, name="decoder_output")
 
+    return code, decoder_input, decoder_output
 
