@@ -88,7 +88,7 @@ with tf.Session() as session:
                 test_sequence_loss = session.run(loss, {x: batch_xs})
                 sequence_loss_vals.append(test_sequence_loss)
             avg_test_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
-            print('Test PSNR: ' + str(avg_test_seq_loss))
+            print('Test Sequence Loss: ' + str(avg_test_seq_loss))
 
 
             # report mean validation loss
@@ -98,7 +98,7 @@ with tf.Session() as session:
                 valid_sequence_loss = session.run(loss, {x: batch_xs})
                 sequence_loss_vals.append(valid_sequence_loss)
             avg_valid_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
-            print('Valid PSNR: ' + str(avg_valid_seq_loss))
+            print('Valid Sequence Loss: ' + str(avg_valid_seq_loss))
 
 
 # start queue runners
