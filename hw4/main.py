@@ -8,18 +8,11 @@ TIME_STEPS = 20
 BATCH_SIZE = 20
 DATA_DIR = '/work/cse496dl/shared/hackathon/08/ptbdata'
 
-class PTBInput(object):
-  """The input data.
-  
-  Code sourced from https://github.com/tensorflow/models/blob/master/tutorials/rnn/ptb/ptb_word_lm.py
-  """
-
-  def __init__(self, data, batch_size, num_steps, name=None):
-    self.batch_size = batch_size
-    self.num_steps = num_steps
-    self.epoch_size = ((len(data) // batch_size) - 1) // num_steps
-    self.input_data, self.targets = ptb_reader.ptb_producer(
-        data, batch_size, num_steps, name=name)
+batch_size = batch_size
+num_steps = num_steps
+epoch_size = ((len(data) // batch_size) - 1) // num_steps
+input_data, targets = ptb_reader.ptb_producer(
+data, batch_size, num_steps, name=name)
 
 raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
 train_data, valid_data, test_data, _ = raw_data
@@ -43,12 +36,7 @@ lstm_cell = tf.contrib.rnn.BasicLSTMCell(LSTM_SIZE)
 initial_state = lstm_cell.zero_state(BATCH_SIZE, tf.float32)
 print("Initial state of the LSTM: " + str(initial_state))
 
-# setup RNN
-outputs, state = tf.nn.dynamic_rnn(lstm_cell, word_embeddings,
-                                   initial_state=initial_state,
-                                   dtype=tf.float32)
-print("The outputs over all timesteps: "+ str(outputs))
-print("The final state of the LSTM layer: " + str(state))
+
 logits = tf.layers.dense(outputs, VOCAB_SIZE)
 
 LEARNING_RATE = 1e-4
