@@ -6,6 +6,7 @@ import ptb_reader
 
 TIME_STEPS = 20
 batch_size = 20
+max_epoch = 50
 DATA_DIR = '/work/cse496dl/shared/hackathon/08/ptbdata'
 
 class PTBInput(object):
@@ -71,7 +72,7 @@ with tf.Session() as session:
 
         session.run(tf.global_variables_initializer())
 
-        while True:
+        for epoch in range(max_epoch):
             print('Epoch: ' + str(epoch))
 
             sequence_loss_vals = []
