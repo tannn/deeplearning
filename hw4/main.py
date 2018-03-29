@@ -62,8 +62,42 @@ loss = tf.contrib.seq2seq.sequence_loss(
 optimizer = tf.train.RMSPropOptimizer(LEARNING_RATE)
 train_op = optimizer.minimize(loss)
 
-session = tf.Session()
-session.run(tf.global_variables_initializer())
+with tf.Session() as session:
+
+        session.run(tf.global_variables_initializer())
+
+        while True:
+            print('Epoch: ' + str(epoch))
+
+            psnr_vals = []
+            for i in range(train_num_examples // batch_size):
+                batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
+                _, train_psnr = session.run([train_op, negative_psnr], {x: batch_xs})
+                train_psnr *= -1
+                psnr_vals.append(train_psnr)
+            avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
+            print('Train PSNR: ' + str(avg_train_psnr))
+
+            psnr_vals = []
+            for i in range(test_num_examples // batch_size):
+                batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
+                test_psnr = session.run(negative_psnr, {x: batch_xs})
+                test_psnr *= -1
+                psnr_vals.append(test_psnr)
+            avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
+            print('Test PSNR: ' + str(avg_test_psnr))
+
+
+            # report mean validation loss
+            psnr_vals = []
+            for i in range(valid_num_examples // batch_size):
+                batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
+                valid_psnr = session.run(negative_psnr, {x: batch_xs})
+                valid_psnr *= -1
+                psnr_vals.append(valid_psnr)
+            avg_valid_psnr = sum(psnr_vals) / len(psnr_vals)
+            print('Valid PSNR: ' + str(avg_valid_psnr))
+
 
 # start queue runners
 coord = tf.train.Coordinator()
