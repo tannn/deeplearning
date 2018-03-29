@@ -25,6 +25,11 @@ raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
 train_data, valid_data, test_data, _ = raw_data
 train_input = PTBInput(train_data, batch_size, TIME_STEPS, name="TrainInput")
 
+train_num_examples = train_data[0].shape
+valid_num_examples = valid_data[0].shape
+test_num_examples = test_data[0].shape
+
+
 print("The time distributed training data: " + str(train_input.input_data))
 print("The similarly distributed targets: " + str(train_input.targets))
 
@@ -69,44 +74,41 @@ with tf.Session() as session:
         while True:
             print('Epoch: ' + str(epoch))
 
-            psnr_vals = []
+            sequence_loss_vals = []
             for i in range(train_num_examples // batch_size):
                 batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-                _, train_psnr = session.run([train_op, negative_psnr], {x: batch_xs})
-                train_psnr *= -1
-                psnr_vals.append(train_psnr)
-            avg_train_psnr = sum(psnr_vals) / len(psnr_vals)
-            print('Train PSNR: ' + str(avg_train_psnr))
+                _, train_loss = session.run([train_op, loss], {x: batch_xs})
+                sequence_loss_vals.append(train_loss)
+            avg_train_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_valsq)
+            print('Train Sequence Loss: ' + str(avg_train_seq_loss))
 
-            psnr_vals = []
+            sequence_loss_vals = []
             for i in range(test_num_examples // batch_size):
                 batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
-                test_psnr = session.run(negative_psnr, {x: batch_xs})
-                test_psnr *= -1
-                psnr_vals.append(test_psnr)
-            avg_test_psnr = sum(psnr_vals) / len(psnr_vals)
-            print('Test PSNR: ' + str(avg_test_psnr))
+                test_sequence_loss = session.run(loss, {x: batch_xs})
+                sequence_loss_vals.append(test_sequence_loss)
+            avg_test_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
+            print('Test PSNR: ' + str(avg_test_seq_loss))
 
 
             # report mean validation loss
-            psnr_vals = []
+            sequence_loss_vals = []
             for i in range(valid_num_examples // batch_size):
-                batch_xs = valid_images[i*batch_size:(i+1)*batch_size, :]
-                valid_psnr = session.run(negative_psnr, {x: batch_xs})
-                valid_psnr *= -1
-                psnr_vals.append(valid_psnr)
-            avg_valid_psnr = sum(psnr_vals) / len(psnr_vals)
-            print('Valid PSNR: ' + str(avg_valid_psnr))
+                batch_xs = valid_data[i*batch_size:(i+1)*batch_size, :]
+                valid_sequence_loss = session.run(loss, {x: batch_xs})
+                sequence_loss_vals.append(valid_sequence_loss)
+            avg_valid_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
+            print('Valid PSNR: ' + str(avg_valid_seq_loss))
 
 
 # start queue runners
 coord = tf.train.Coordinator()
 threads = tf.train.start_queue_runners(sess=session, coord=coord)
 
-# retrieve some data to look at
-examples = session.run([train_input.input_data, train_input.targets])
-# we can run the train op as usual
-_ = session.run(train_op)
+# # retrieve some data to look at
+# examples = session.run([train_input.input_data, train_input.targets])
+# # we can run the train op as usual
+# _ = session.run(train_op)
 
 print("Example input data:\n" + str(examples[0][1]))
 print("Example target:\n" + str(examples[1][1]))
