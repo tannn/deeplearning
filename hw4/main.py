@@ -26,9 +26,9 @@ raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
 train_data, valid_data, test_data, _ = raw_data
 train_input = PTBInput(train_data, batch_size, TIME_STEPS, name="TrainInput")
 
-train_num_examples = train_data[0].shape
-valid_num_examples = valid_data[0].shape
-test_num_examples = test_data[0].shape
+train_num_examples = train_data.shape[0]
+valid_num_examples = valid_data.shape[0]
+test_num_examples = test_data.shape[0]
 
 
 print("The time distributed training data: " + str(train_input.input_data))
