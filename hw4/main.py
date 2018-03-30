@@ -77,28 +77,25 @@ with tf.Session() as session:
             print('Epoch: ' + str(epoch))
 
             sequence_loss_vals = []
-            for i in range(train_num_examples // batch_size):
-                batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-                _, train_loss = session.run([train_op, loss], {x: batch_xs})
-                sequence_loss_vals.append(train_loss)
+            batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
+            _, train_loss = session.run([train_op, loss], {x: batch_xs})
+            sequence_loss_vals.append(train_loss)
             avg_train_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_valsq)
             print('Train Sequence Loss: ' + str(avg_train_seq_loss))
 
             sequence_loss_vals = []
-            for i in range(test_num_examples // batch_size):
-                batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
-                test_sequence_loss = session.run(loss, {x: batch_xs})
-                sequence_loss_vals.append(test_sequence_loss)
+            batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
+            test_sequence_loss = session.run(loss, {x: batch_xs})
+            sequence_loss_vals.append(test_sequence_loss)
             avg_test_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
             print('Test Sequence Loss: ' + str(avg_test_seq_loss))
 
 
             # report mean validation loss
             sequence_loss_vals = []
-            for i in range(valid_num_examples // batch_size):
-                batch_xs = valid_data[i*batch_size:(i+1)*batch_size, :]
-                valid_sequence_loss = session.run(loss, {x: batch_xs})
-                sequence_loss_vals.append(valid_sequence_loss)
+            batch_xs = valid_data[i*batch_size:(i+1)*batch_size, :]
+            valid_sequence_loss = session.run(loss, {x: batch_xs})
+            sequence_loss_vals.append(valid_sequence_loss)
             avg_valid_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
             print('Valid Sequence Loss: ' + str(avg_valid_seq_loss))
 
