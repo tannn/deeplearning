@@ -29,9 +29,10 @@ train_input = PTBInput(train_data, batch_size, TIME_STEPS, name="TrainInput")
 valid_input = PTBInput(valid_data, batch_size, TIME_STEPS, name="ValidInput")
 test_input = PTBInput(test_data, batch_size, TIME_STEPS, name="TestInput")
 
-train_num_examples = train_input.shape[0]
-valid_num_examples = valid_input.shape[0]
-test_num_examples = test_input.shape[0]
+# train_num_examples = train_input.shape[0]
+# valid_num_examples = valid_input.shape[0]
+# test_num_examples = test_input.shape[0]
+
 
 print("The time distributed training data: " + str(train_input.input_data))
 print("The similarly distributed targets: " + str(train_input.targets))
