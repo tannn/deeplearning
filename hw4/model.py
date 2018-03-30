@@ -1,5 +1,6 @@
-# setup RNN
+import tensorflow as tf
 
+# setup RNN
 def rnn_block(lstm_cell, word_embeddings, initial_state):
 	outputs, state = tf.nn.dynamic_rnn(lstm_cell, word_embeddings,
 	                                   initial_state=initial_state,
