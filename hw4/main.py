@@ -24,11 +24,12 @@ class PTBInput(object):
 
 raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
 train_data, valid_data, test_data, _ = raw_data
+
 train_input = PTBInput(train_data, batch_size, TIME_STEPS, name="TrainInput")
 
-train_num_examples = train_data.shape[0]
-valid_num_examples = valid_data.shape[0]
-test_num_examples = test_data.shape[0]
+train_num_examples = train_data.input_data
+valid_num_examples = valid_data.input_data
+test_num_examples = test_data.input_data
 
 
 print("The time distributed training data: " + str(train_input.input_data))
