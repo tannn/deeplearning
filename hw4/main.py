@@ -3,7 +3,7 @@ import numpy as np
 import sys
 sys.path.append("/work/cse496dl/shared/hackathon/08")
 import ptb_reader
-
+from model import *
 TIME_STEPS = 20
 batch_size = 20
 max_epoch = 50
@@ -53,9 +53,7 @@ lstm_cell = tf.contrib.rnn.BasicLSTMCell(LSTM_SIZE)
 initial_state = lstm_cell.zero_state(batch_size, tf.float32)
 print("Initial state of the LSTM: " + str(initial_state))
 
-outputs, state = tf.nn.dynamic_rnn(lstm_cell, word_embeddings,
-                                   initial_state=initial_state,
-                                   dtype=tf.float32)
+outputs, state = rnn_block(lstm_cell, word_embeddings, initial_state)
 
 logits = tf.layers.dense(outputs, VOCAB_SIZE)
 
