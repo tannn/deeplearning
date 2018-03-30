@@ -26,11 +26,12 @@ raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
 train_data, valid_data, test_data, _ = raw_data
 
 train_input = PTBInput(train_data, batch_size, TIME_STEPS, name="TrainInput")
+valid_input = PTBInput(valid_data, batch_size, TIME_STEPS, name="ValidInput")
+test_input = PTBInput(test_data, batch_size, TIME_STEPS, name="TestInput")
 
-train_num_examples = train_data.input_data
-valid_num_examples = valid_data.input_data
-test_num_examples = test_data.input_data
-
+train_num_examples = train_input.input_data
+valid_num_examples = valid_input.input_data
+test_num_examples = test_input.input_data
 
 print("The time distributed training data: " + str(train_input.input_data))
 print("The similarly distributed targets: " + str(train_input.targets))
