@@ -12,7 +12,7 @@ def main(argv):
         path_string = f.read().split(sep='\n')[0]
 
     grace = 10
-    counter = 0
+    counter = 0 
     epoch = 0
 
     save_dir = '/work/' + path_string + '/homework03/logs'
