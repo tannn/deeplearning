@@ -45,7 +45,7 @@ embedding_matrix = tf.get_variable('embedding_matrix', dtype=tf.float32, shape=[
 word_embeddings = tf.nn.embedding_lookup(embedding_matrix, train_input.input_data)
 print("The output of the word embedding: " + str(word_embeddings))
 
-LSTM_SIZE = 200 # number of units in the LSTM layer, this number taken from a "small" language model
+LSTM_SIZE = 100 # number of units in the LSTM layer, this number taken from a "small" language model
 
 lstm_cell = tf.contrib.rnn.BasicLSTMCell(LSTM_SIZE)
 
@@ -71,21 +71,19 @@ train_op = optimizer.minimize(loss)
 
 with tf.Session() as session:
 
-        session.run(tf.global_variables_initializer())
+    session.run(tf.global_variables_initializer())
 
-        for epoch in range(max_epoch):
-            print('Epoch: ' + str(epoch))
+    print("Training begins")
+    _, train_sequence_loss = session.run([train_op, loss])
+    print('Train Sequence Loss: ' + str(train_sequence_loss))
+    print("Training ends")
 
-            _, train_sequence_loss = session.run([train_op, loss])
-            print('Train Sequence Loss: ' + str(train_sequence_loss))
+    test_sequence_loss = session.run(loss)
+    print('Test Sequence Loss: ' + str(test_sequence_loss))
 
-            test_sequence_loss = session.run(loss)
-            print('Test Sequence Loss: ' + str(test_sequence_loss))
-
-
-            # report mean validation loss
-            valid_sequence_loss = session.run(loss)
-            print('Valid Sequence Loss: ' + str(valid_sequence_loss))
+    # report mean validation loss
+    valid_sequence_loss = session.run(loss)
+    print('Valid Sequence Loss: ' + str(valid_sequence_loss))
 
 
 # start queue runners
