@@ -76,28 +76,16 @@ with tf.Session() as session:
         for epoch in range(max_epoch):
             print('Epoch: ' + str(epoch))
 
-            sequence_loss_vals = []
-            batch_xs = train_data[i*batch_size:(i+1)*batch_size, :]
-            _, train_loss = session.run([train_op, loss], {x: batch_xs})
-            sequence_loss_vals.append(train_loss)
-            avg_train_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_valsq)
-            print('Train Sequence Loss: ' + str(avg_train_seq_loss))
+            _, train_sequence_loss = session.run([train_op, loss])
+            print('Train Sequence Loss: ' + str(train_sequence_loss))
 
-            sequence_loss_vals = []
-            batch_xs = test_data[i*batch_size:(i+1)*batch_size, :]
-            test_sequence_loss = session.run(loss, {x: batch_xs})
-            sequence_loss_vals.append(test_sequence_loss)
-            avg_test_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
-            print('Test Sequence Loss: ' + str(avg_test_seq_loss))
+            test_sequence_loss = session.run(loss)
+            print('Test Sequence Loss: ' + str(test_sequence_loss))
 
 
             # report mean validation loss
-            sequence_loss_vals = []
-            batch_xs = valid_data[i*batch_size:(i+1)*batch_size, :]
-            valid_sequence_loss = session.run(loss, {x: batch_xs})
-            sequence_loss_vals.append(valid_sequence_loss)
-            avg_valid_seq_loss = sum(sequence_loss_vals) / len(sequence_loss_vals)
-            print('Valid Sequence Loss: ' + str(avg_valid_seq_loss))
+            valid_sequence_loss = session.run(loss)
+            print('Valid Sequence Loss: ' + str(valid_sequence_loss))
 
 
 # start queue runners
