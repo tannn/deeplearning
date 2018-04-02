@@ -40,7 +40,7 @@ print("The similarly distributed targets: " + str(train_input.targets))
 VOCAB_SIZE = 10000
 EMBEDDING_SIZE = 100
 counter = 0
-
+grace = 10
 # setup input and embedding
 embedding_matrix = tf.get_variable('embedding_matrix', dtype=tf.float32, shape=[VOCAB_SIZE, EMBEDDING_SIZE], trainable=True)
 word_embeddings = tf.nn.embedding_lookup(embedding_matrix, train_input.input_data)
