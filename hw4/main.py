@@ -73,6 +73,10 @@ with tf.Session() as session:
 
     session.run(tf.global_variables_initializer())
 
+    # start queue runners
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=session, coord=coord)
+
     print("Training begins")
     _, train_sequence_loss = session.run([train_op, loss])
     print('Train Sequence Loss: ' + str(train_sequence_loss))
@@ -86,9 +90,6 @@ with tf.Session() as session:
     print('Valid Sequence Loss: ' + str(valid_sequence_loss))
 
 
-# start queue runners
-coord = tf.train.Coordinator()
-threads = tf.train.start_queue_runners(sess=session, coord=coord)
 
 # # retrieve some data to look at
 # examples = session.run([train_input.input_data, train_input.targets])
