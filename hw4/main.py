@@ -95,7 +95,7 @@ with tf.Session() as session:
         valid_sequence_loss = session.run(loss)
         print('Valid Sequence Loss: ' + str(valid_sequence_loss))
 
-        if (valid_sequence_loss < best_valid_loss):
+        if (valid_sequence_loss < best_valid_sequence_loss):
             print('New best found!')
             best_train_sequence_loss = train_sequence_loss
             best_valid_sequence_loss = valid_sequence_loss
