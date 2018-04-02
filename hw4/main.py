@@ -73,16 +73,14 @@ with tf.Session() as session:
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=session, coord=coord)
 
-    best_valid_sequence_loss = float("-inf")
+    best_valid_sequence_loss = float("inf")
 
     for epoch in range(max_epoch):
 
         print("Epoch: " + str(epoch))
 
-        print("Training begins")
         _, train_sequence_loss = session.run([train_op, loss])
         print('Train Sequence Loss: ' + str(train_sequence_loss))
-        print("Training ends")
 
         test_sequence_loss = session.run(loss)
         print('Test Sequence Loss: ' + str(test_sequence_loss))
