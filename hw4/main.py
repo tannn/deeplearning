@@ -84,10 +84,8 @@ with tf.Session() as session:
 
         print("Epoch: " + str(epoch))
 
-        print("Training begins")
         _, train_sequence_loss = session.run([train_op, loss])
         print('Train Sequence Loss: ' + str(train_sequence_loss))
-        print("Training ends")
 
         test_sequence_loss = session.run(loss)
         print('Test Sequence Loss: ' + str(test_sequence_loss))
