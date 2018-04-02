@@ -29,11 +29,6 @@ train_input = PTBInput(train_data, batch_size, TIME_STEPS, name="TrainInput")
 valid_input = PTBInput(valid_data, batch_size, TIME_STEPS, name="ValidInput")
 test_input = PTBInput(test_data, batch_size, TIME_STEPS, name="TestInput")
 
-# train_num_examples = train_input.shape[0]
-# valid_num_examples = valid_input.shape[0]
-# test_num_examples = test_input.shape[0]
-
-
 print("The time distributed training data: " + str(train_input.input_data))
 print("The similarly distributed targets: " + str(train_input.targets))
 
@@ -73,26 +68,46 @@ with tf.Session() as session:
 
     session.run(tf.global_variables_initializer())
 
-    print("Training begins")
-    _, train_sequence_loss = session.run([train_op, loss])
-    print('Train Sequence Loss: ' + str(train_sequence_loss))
-    print("Training ends")
+    # start queue runners
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=session, coord=coord)
 
-    test_sequence_loss = session.run(loss)
-    print('Test Sequence Loss: ' + str(test_sequence_loss))
+    best_valid_sequence_loss = float("-inf")
 
-    # report mean validation loss
-    valid_sequence_loss = session.run(loss)
-    print('Valid Sequence Loss: ' + str(valid_sequence_loss))
+    for epoch in range(max_epoch):
 
-# start queue runners
-coord = tf.train.Coordinator()
-threads = tf.train.start_queue_runners(sess=session, coord=coord)
+        print("Epoch: " + str(epoch))
 
-# # retrieve some data to look at
-# examples = session.run([train_input.input_data, train_input.targets])
-# # we can run the train op as usual
-# _ = session.run(train_op)
+        print("Training begins")
+        _, train_sequence_loss = session.run([train_op, loss])
+        print('Train Sequence Loss: ' + str(train_sequence_loss))
+        print("Training ends")
 
-print("Example input data:\n" + str(examples[0][1]))
-print("Example target:\n" + str(examples[1][1]))
+        test_sequence_loss = session.run(loss)
+        print('Test Sequence Loss: ' + str(test_sequence_loss))
+
+        # report mean validation loss
+        valid_sequence_loss = session.run(loss)
+        print('Valid Sequence Loss: ' + str(valid_sequence_loss))
+
+        if (valid_sequence_loss < best_valid_loss):
+            print('New best found!')
+            best_train_sequence_loss = train_sequence_loss
+            best_valid_sequence_loss = valid_sequence_loss
+            best_test_sequence_loss = test_sequence_loss
+            best_epoch = epoch
+            counter = 0
+        else:
+            counter = counter + 1
+
+        if counter >= grace:
+            break
+
+        print('--------------------------------------')
+        print('\n')
+
+    print('Best Epoch: ' + str(best_epoch))
+    print('Train Loss: ' + str(best_train_sequence_loss))
+    print('Best Valid Loss: ' + str(best_valid_sequence_loss))
+    print('Test Loss: ' + str(best_test_sequence_loss))
+
