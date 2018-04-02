@@ -85,7 +85,6 @@ with tf.Session() as session:
     valid_sequence_loss = session.run(loss)
     print('Valid Sequence Loss: ' + str(valid_sequence_loss))
 
-
 # start queue runners
 coord = tf.train.Coordinator()
 threads = tf.train.start_queue_runners(sess=session, coord=coord)
