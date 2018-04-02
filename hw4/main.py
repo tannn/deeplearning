@@ -77,15 +77,42 @@ with tf.Session() as session:
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=session, coord=coord)
 
-    print("Training begins")
-    _, train_sequence_loss = session.run([train_op, loss])
-    print('Train Sequence Loss: ' + str(train_sequence_loss))
-    print("Training ends")
+    best_valid_sequence_loss = float("-inf")
 
-    test_sequence_loss = session.run(loss)
-    print('Test Sequence Loss: ' + str(test_sequence_loss))
+    for epoch in range(max_epoch):
 
-    # report mean validation loss
-    valid_sequence_loss = session.run(loss)
-    print('Valid Sequence Loss: ' + str(valid_sequence_loss))
+        print("Epoch: " + str(epoch))
+
+        print("Training begins")
+        _, train_sequence_loss = session.run([train_op, loss])
+        print('Train Sequence Loss: ' + str(train_sequence_loss))
+        print("Training ends")
+
+        test_sequence_loss = session.run(loss)
+        print('Test Sequence Loss: ' + str(test_sequence_loss))
+
+        # report mean validation loss
+        valid_sequence_loss = session.run(loss)
+        print('Valid Sequence Loss: ' + str(valid_sequence_loss))
+
+            if (valid_sequence_loss < best_valid_loss):
+                print('New best found!')
+                best_train_sequence_loss = train_sequence_loss
+                best_valid_sequence_loss = valid_sequence_loss
+                best_test_sequence_loss = test_sequence_loss
+                best_epoch = epoch
+                counter = 0
+            else:
+                counter = counter + 1
+
+            if counter >= grace:
+                break
+
+        print('--------------------------------------')
+        print('\n')
+
+    print('Best Epoch: ' + str(best_epoch))
+    print('Train Loss: ' + str(best_train_sequence_loss))
+    print('Best Valid Loss: ' + str(best_valid_sequence_loss))
+    print('Test Loss: ' + str(best_test_sequence_loss))
 
