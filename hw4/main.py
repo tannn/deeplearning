@@ -89,12 +89,3 @@ with tf.Session() as session:
     valid_sequence_loss = session.run(loss)
     print('Valid Sequence Loss: ' + str(valid_sequence_loss))
 
-
-
-# # retrieve some data to look at
-# examples = session.run([train_input.input_data, train_input.targets])
-# # we can run the train op as usual
-# _ = session.run(train_op)
-
-print("Example input data:\n" + str(examples[0][1]))
-print("Example target:\n" + str(examples[1][1]))
