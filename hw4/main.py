@@ -41,7 +41,7 @@ embedding_matrix = tf.get_variable('embedding_matrix', dtype=tf.float32, shape=[
 word_embeddings = tf.nn.embedding_lookup(embedding_matrix, train_input.input_data)
 print("The output of the word embedding: " + str(word_embeddings))
 
-LSTM_SIZE = 100 # number of units in the LSTM layer, this number taken from a "small" language model
+LSTM_SIZE = 500 # number of units in the LSTM layer, this number taken from a "small" language model
 
 lstm_cell = tf.contrib.rnn.BasicLSTMCell(LSTM_SIZE)
 
@@ -53,7 +53,7 @@ outputs, state = rnn_block(lstm_cell, word_embeddings, initial_state)
 
 logits = tf.layers.dense(outputs, VOCAB_SIZE)
 
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 1e-3
 
 loss = tf.contrib.seq2seq.sequence_loss(
     logits,
@@ -62,8 +62,17 @@ loss = tf.contrib.seq2seq.sequence_loss(
     average_across_timesteps=True,
     average_across_batch=True)
 
-optimizer = tf.train.RMSPropOptimizer(LEARNING_RATE)
-train_op = optimizer.minimize(loss)
+REG_COEF = 0.01
+
+regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+
+total_loss = loss + REG_COEF * sum(regularization_losses)
+
+
+
+with tf.name_scope('optimizer') as scope:
+    optimizer = tf.train.RMSPropOptimizer(LEARNING_RATE)
+    train_op = optimizer.minimize(total_loss)
 
 with tf.Session() as session:
 
@@ -79,7 +88,7 @@ with tf.Session() as session:
 
         print("Epoch: " + str(epoch))
 
-        _, train_sequence_loss = session.run([train_op, loss])
+        _, train_sequence_loss = session.run([train_op])
         print('Train Sequence Loss: ' + str(train_sequence_loss))
 
         test_sequence_loss = session.run(loss)
@@ -109,4 +118,3 @@ with tf.Session() as session:
     print('Train Loss: ' + str(best_train_sequence_loss))
     print('Best Valid Loss: ' + str(best_valid_sequence_loss))
     print('Test Loss: ' + str(best_test_sequence_loss))
-

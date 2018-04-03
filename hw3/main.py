@@ -57,7 +57,6 @@ def main(argv):
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
         train_op = optimizer.minimize(total_loss)
 
-
     with tf.Session() as session:
 
         session.run(tf.global_variables_initializer())
