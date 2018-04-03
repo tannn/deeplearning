@@ -36,6 +36,7 @@ print("The similarly distributed targets: " + str(train_input.targets))
 VOCAB_SIZE = 10000
 EMBEDDING_SIZE = 100
 counter = 0
+epoch = 0
 grace = 10
 # setup input and embedding
 embedding_matrix = tf.get_variable('embedding_matrix', dtype=tf.float32, shape=[VOCAB_SIZE, EMBEDDING_SIZE], trainable=True)
@@ -76,7 +77,7 @@ with tf.Session() as session:
 
     best_valid_sequence_loss = float("inf")
 
-    for epoch in range(max_epoch):
+    while(true):
 
         print("Epoch: " + str(epoch))
 
