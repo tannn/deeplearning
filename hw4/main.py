@@ -42,7 +42,7 @@ embedding_matrix = tf.get_variable('embedding_matrix', dtype=tf.float32, shape=[
 word_embeddings = tf.nn.embedding_lookup(embedding_matrix, train_input.input_data)
 print("The output of the word embedding: " + str(word_embeddings))
 
-LSTM_SIZE = 100 # number of units in the LSTM layer, this number taken from a "small" language model
+LSTM_SIZE = 200 # number of units in the LSTM layer, this number taken from a "small" language model
 
 lstm_cell = tf.contrib.rnn.BasicLSTMCell(LSTM_SIZE)
 
