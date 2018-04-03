@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 def ptb_producer(raw_data, batch_size, num_steps, name=None):
   """Iterate on the raw PTB data.
   This chunks up raw_data into batches of examples and returns Tensors that
