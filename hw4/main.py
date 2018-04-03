@@ -3,6 +3,7 @@ import numpy as np
 import sys
 sys.path.append("/work/cse496dl/shared/hackathon/08")
 import ptb_reader
+from util import *
 from model import *
 TIME_STEPS = 20
 batch_size = 20
@@ -19,7 +20,7 @@ class PTBInput(object):
     self.batch_size = batch_size
     self.num_steps = num_steps
     self.epoch_size = ((len(data) // batch_size) - 1) // num_steps
-    self.input_data, self.targets = ptb_reader.ptb_producer(
+    self.input_data, self.targets = ptb_producer(
         data, batch_size, num_steps, name=name)
 
 raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
@@ -35,6 +36,7 @@ print("The similarly distributed targets: " + str(train_input.targets))
 VOCAB_SIZE = 10000
 EMBEDDING_SIZE = 100
 counter = 0
+epoch = 0
 grace = 10
 # setup input and embedding
 embedding_matrix = tf.get_variable('embedding_matrix', dtype=tf.float32, shape=[VOCAB_SIZE, EMBEDDING_SIZE], trainable=True)
@@ -84,7 +86,7 @@ with tf.Session() as session:
 
     best_valid_sequence_loss = float("inf")
 
-    for epoch in range(max_epoch):
+    while(True):
 
         print("Epoch: " + str(epoch))
 
