@@ -77,7 +77,7 @@ with tf.Session() as session:
 
     best_valid_sequence_loss = float("inf")
 
-    while(true):
+    while(True):
 
         print("Epoch: " + str(epoch))
 
