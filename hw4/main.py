@@ -115,6 +115,7 @@ with tf.Session() as session:
 
         print('--------------------------------------')
         print('\n')
+        epoch = epoch + 1
 
     print('Best Epoch: ' + str(best_epoch))
     print('Train Loss: ' + str(best_train_sequence_loss))
