@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def ptb_producer(raw_data, batch_size, num_steps, name=None):
+def ptb_producer(raw_data, batch_size, num_steps, k, name=None):
   """Iterate on the raw PTB data.
   This chunks up raw_data into batches of examples and returns Tensors that
   are drawn from these batches.
@@ -36,7 +36,7 @@ def ptb_producer(raw_data, batch_size, num_steps, name=None):
     x = tf.strided_slice(data, [0, i * num_steps],
                          [batch_size, (i + 1) * num_steps])
     x.set_shape([batch_size, num_steps])
-    y = tf.strided_slice(data, [0, i * num_steps + 2],
-                         [batch_size, (i + 1) * num_steps + 2])
+    y = tf.strided_slice(data, [0, i * num_steps + k],
+                         [batch_size, (i + 1) * num_steps + k])
     y.set_shape([batch_size, num_steps])
   return x, y

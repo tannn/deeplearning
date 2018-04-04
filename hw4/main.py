@@ -21,7 +21,7 @@ class PTBInput(object):
     self.num_steps = num_steps
     self.epoch_size = ((len(data) // batch_size) - 1) // num_steps
     self.input_data, self.targets = ptb_producer(
-        data, batch_size, num_steps, name=name)
+        data, batch_size, num_steps, k=1, name=name)
 
 raw_data = ptb_reader.ptb_raw_data(DATA_DIR)
 train_data, valid_data, test_data, _ = raw_data
@@ -69,7 +69,6 @@ REG_COEF = 0.01
 regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 
 total_loss = loss + REG_COEF * sum(regularization_losses)
-
 
 
 with tf.name_scope('optimizer') as scope:
